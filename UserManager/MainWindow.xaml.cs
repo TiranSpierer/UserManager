@@ -1,28 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using DAL;
+using DAL.Services;
+using Domain.Models;
+using UserManager.ViewModels;
 
-namespace UserManager
+namespace UserManager;
+
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private readonly IDataService<User> _dataService;
+
+    public MainWindow(IDataService<User> dataService)
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        _dataService = dataService;
+        DataContext  = new Workspace();
+    }
+
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    {
+        ButtonBase_OnClickAsync();
+    }
+
+    private async void ButtonBase_OnClickAsync()
+    {
+        var temp = await _dataService.GetById("Admin");
+        TextBloock.Text = temp?.Name;
+
     }
 }
