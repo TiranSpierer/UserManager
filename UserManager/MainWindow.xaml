@@ -3,15 +3,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UserManager"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="700" MinWidth="1000" Width="1000">
+
+    <!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+    </ScrollViewer>-->
+    
+    
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <TextBlock x:Name="TextBloock" Text="test" FontSize="32"/>
-            
-            <!--<ContentControl Content="{Binding CurrentViewModel}"/>-->
-        </ScrollViewer>
-        <Button Click="ButtonBase_OnClick" Width="30" Height="30" Content="click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Margin="5">
+            <TextBlock Text="ID: " FontSize="32" />
+            <TextBlock Text="Name: " FontSize="32" />
+            <TextBlock Text="Password: " FontSize="32" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="0" Margin="5">
+            <TextBox x:Name="IdTextBox" Width="100" HorizontalAlignment="Left" Margin="8" FontSize="15"/>
+            <TextBox x:Name="NameTextBox" Width="100" HorizontalAlignment="Left" Margin="8" FontSize="15"/>
+            <TextBox x:Name="PasswordTextBox" Width="100" HorizontalAlignment="Left" Margin="8" FontSize="15"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="5" Orientation="Horizontal" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <Button Click="ButtonAdd_OnClick" Width="auto" Height="auto" Content="Add" Margin="5"/>
+            <Button Click="ButtonUpdate_OnClick" Width="auto" Height="auto" Content="Update" Margin="5"/>
+            <Button Click="ButtonRemove_OnClick" Width="auto" Height="auto" Content="Remove" Margin="5"/>
+            <Button Click="ButtonShowAll_OnClick" Width="auto" Height="auto" Content="ShowAll" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="2">
+            <TextBlock x:Name="IdTextBlock" Text="ID " FontSize="32" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="NameTextBlock" Text="Name " FontSize="32" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="PasswordTextBlock" Text="Password " FontSize="32" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+
+
     </Grid>
 </Window>

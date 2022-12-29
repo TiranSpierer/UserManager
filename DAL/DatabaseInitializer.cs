@@ -30,11 +30,18 @@ public class DatabaseInitializer : IDatabaseInitializer
 
     public void Initialize()
     {
-        var connectionString = "C:\\ENVue\\Database\\ENvueDatabase.db";
-        
-        if (!File.Exists(connectionString))
+        _context.Database.EnsureCreated();
+        CreateDefaultUser();
+    }
+
+    #endregion
+
+#region Private Methods
+
+    private void CreateDefaultUser()
+    {
+        if (_context.Users?.Find("Admin") == null)
         {
-            _context.Database.EnsureCreated();
             var user = new User
                        {
                            Id       = "Admin",
@@ -54,13 +61,13 @@ public class DatabaseInitializer : IDatabaseInitializer
                                         UserId    = user.Id,
                                         Privilege = privilege
                                     };
-                _context.UserPrivileges.Add(userPrivilege);
+                _context.UserPrivileges?.Add(userPrivilege);
             }
 
-            _context.Users.Add(user);
+            _context.Users?.Add(user);
             _context.SaveChanges();
         }
     }
-#endregion
 
+#endregion
 }

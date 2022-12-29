@@ -16,14 +16,19 @@ public class DataBaseContext : DbContext
         
     }
 
-    public DbSet<User>          Users          { get; set; }
-    public DbSet<Patient>       Patients       { get; set; }
-    public DbSet<UserPrivilege> UserPrivileges { get; set; }
+    public DbSet<User>?          Users          { get; set; }
+    public DbSet<Patient>?       Patients       { get; set; }
+    public DbSet<UserPrivilege>? UserPrivileges { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserPrivilege>()
                     .HasKey(up => new { up.UserId, up.Privilege });
+
+        modelBuilder.Entity<User>()
+                    .HasMany(u => u.UserPrivileges)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
     }
 
 }
