@@ -70,7 +70,7 @@ public class LoginViewModel : ViewModelBase
     {
         var user = await _userService.GetById(Username);
 
-        if (user == null || user.Password == Password)
+        if (user == null || user.Password != Password)
         {
             // Display an error message if the user doesn't exist or the password is incorrect.
             // You can use the INotifyPropertyChanged interface to notify the view when the error message should be displayed.

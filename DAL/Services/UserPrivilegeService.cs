@@ -27,42 +27,67 @@ public class UserPrivilegeService : DataServiceBase,
 
     public async Task Create(UserPrivilege entity)
     {
-        await _context.UserPrivileges.AddAsync(entity);
+        await _context.UserPrivileges!.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserPrivilege?> GetById(object id)
+    public async Task<UserPrivilege?> GetById(object compositeId)
     {
-        throw new NotImplementedException();
+        UserPrivilege? userPrivilege = null;
+
+        if (compositeId is UserPrivilege id)
+        {
+            userPrivilege = await _context.UserPrivileges!.FindAsync(id.UserId, id.Privilege);
+        }
+
+        return userPrivilege;
     }
 
-    public async Task<UserPrivilege?> GetById(string id, Privilege privilege)
+    public async Task<IEnumerable<Privilege>?> GetAllUserPrivilegesByUserId(string userId)
     {
-        return await _context.UserPrivileges.FindAsync(id, privilege);
+        var privileges = await _context.UserPrivileges!
+                                       .Where(up => up.UserId == userId)
+                                       .Select(up => up.Privilege)
+                                       .ToListAsync();
+
+        return privileges;
     }
 
-    public async Task<IEnumerable<Privilege>?> GetAllById(string id)
+    public async Task<IEnumerable<User>?> GetUsersByPrivilege(Privilege privilege)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        var users = await _context.Users!
+                                  .Include(u => u.UserPrivileges)
+                                  .Where(u => u.UserPrivileges!.Any(up => up.Privilege == privilege))
+                                  .ToListAsync();
 
-        return user?.UserPrivileges.Select(up => up.Privilege);
+        return users;
     }
 
     public async Task<IEnumerable<UserPrivilege>> GetAll()
     {
-        return await _context.UserPrivileges.ToListAsync();
+        return await _context.UserPrivileges!.ToListAsync();
     }
 
-    public async Task Update(UserPrivilege entity)
+    public async Task Update(object id, UserPrivilege updatedEntity)
     {
-        _context.UserPrivileges.Update(entity);
-        await _context.SaveChangesAsync();
+        var entity = await GetById(id);
+
+        if (entity != null)
+        {
+            _context.UserPrivileges!.Update(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public async Task Delete(UserPrivilege entity)
+    public async Task Delete(object id)
     {
-        _context.UserPrivileges.Remove(entity);
-        await _context.SaveChangesAsync();
+        var entity = await GetById(id);
+
+        if (entity != null)
+        {
+            _context.UserPrivileges!.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
 #endregion

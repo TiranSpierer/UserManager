@@ -12,10 +12,10 @@ public class User
 
 #region Public Properties
 
-    public string                     Id             { get; set; }
-    public string                     Name           { get; set; }
-    public string                     Password       { get; set; }
-    public ICollection<UserPrivilege> UserPrivileges { get; set; }
+    public string                      Id             { get; set; }
+    public string?                     Name           { get; set; }
+    public string?                     Password       { get; set; }
+    public ICollection<UserPrivilege>? UserPrivileges { get; set; }
 
     #endregion
 

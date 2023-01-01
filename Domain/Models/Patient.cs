@@ -12,9 +12,9 @@ public class Patient
 
     #region Public Properties
 
-    public int      Id          { get; set; }
-    public string   Name        { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public int       Id          { get; set; }
+    public string?   Name        { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     #endregion
 

@@ -43,10 +43,17 @@ public class UserService : DataServiceBase,
         return await _context.Users!.ToListAsync();
     }
 
-    public async Task Update(User entity)
+    public async Task Update(object id, User updatedEntity)
     {
-        _context.Users!.Update(entity);
-        await _context.SaveChangesAsync();
+        var entity = await GetById(id);
+
+        if (entity != null)
+        {
+            entity.Name     = updatedEntity.Name;
+            entity.Password = updatedEntity.Password;
+            _context.Users!.Update(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task Delete(User entity)
@@ -54,7 +61,19 @@ public class UserService : DataServiceBase,
         //_context.Users.Remove(entity);
         _context.Entry(entity).State = EntityState.Deleted;
         await _context.SaveChangesAsync();
+
     }
 
-#endregion
+    public async Task Delete(object id)
+    {
+        var entity = await GetById(id);
+
+        if (entity != null)
+        {
+            _context.Users!.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    #endregion
 }

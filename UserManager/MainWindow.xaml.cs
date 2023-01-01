@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DAL;
@@ -40,7 +41,7 @@ public partial class MainWindow : Window
                        Name     = NameTextBox.Text,
                        Password = PasswordTextBox.Text
                    };
-        _dataService.Update(user);
+        _dataService.Update(IdTextBox.Text, user);
 
         Clean();
     }

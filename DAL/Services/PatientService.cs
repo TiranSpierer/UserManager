@@ -25,6 +25,7 @@ public class PatientService : DataServiceBase,
 
     public async Task Create(Patient entity)
     {
+        //TODO exception thrown if entity with the same id already in DB
         _context.Patients!.Add(entity);
         await _context.SaveChangesAsync();
     }
@@ -39,17 +40,29 @@ public class PatientService : DataServiceBase,
         return await _context.Patients!.ToListAsync();
     }
 
-    public async Task Update(Patient entity)
+    public async Task Update(object id, Patient updatedEntity)
     {
-        _context.Patients!.Update(entity);
-        await _context.SaveChangesAsync();
+        var entity = await GetById(id);
+
+        if (entity != null)
+        {
+            entity.Name        = updatedEntity.Name;
+            entity.DateOfBirth = updatedEntity.DateOfBirth;
+            _context.Patients!.Update(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public async Task Delete(Patient entity)
+    public async Task Delete(object id)
     {
-        _context.Patients!.Remove(entity);
-       await _context.SaveChangesAsync();
+        var entity = await GetById(id);
+
+        if (entity != null)
+        {
+            _context.Patients!.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
-#endregion
+    #endregion
 }
