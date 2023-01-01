@@ -22,13 +22,37 @@ public class DataBaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserPrivilege>()
-                    .HasKey(up => new { up.UserId, up.Privilege });
+        UserBuilder(modelBuilder);
+        PatientBuilder(modelBuilder);
+        UserPrivilegeBuilder(modelBuilder);
+    }
 
+    private static void UserBuilder(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<User>()
                     .HasMany(u => u.UserPrivileges)
                     .WithOne()
                     .OnDelete(DeleteBehavior.Cascade);
     }
 
+    private static void PatientBuilder(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Patient>()
+                    .Property(p => p.Id)
+                    .ValueGeneratedNever();
+
+        modelBuilder.Entity<Patient>()
+                    .Property(p => p.Name)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<Patient>()
+                    .Property(p => p.DateOfBirth)
+                    .IsRequired(false);
+    }
+
+    private static void UserPrivilegeBuilder(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UserPrivilege>()
+                    .HasKey(up => new { up.UserId, up.Privilege });
+    }
 }

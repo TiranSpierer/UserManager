@@ -40,7 +40,7 @@ public class DatabaseInitializer : IDatabaseInitializer
 
     private void CreateDefaultUser()
     {
-        if (_context.Users?.Find("Admin") == null)
+        if (_context.Users!.Find("Admin") == null)
         {
             var user = new User
                        {

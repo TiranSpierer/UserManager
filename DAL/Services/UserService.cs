@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Models;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,23 +25,27 @@ public class UserService : DataServiceBase,
 
     public async Task Create(User entity)
     {
-        await _context.Users.AddAsync(entity);
+        await _context.Users!.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
     public async Task <User?> GetById(object id)
     {
-        return await _context.Users.FindAsync(id);
+        return await _context.Users!
+                             .Include(u => u.UserPrivileges)
+                             .FirstOrDefaultAsync(u => u.Id == id as string);
+
+        //return await _context.Users!.FindAsync(id);
     }
 
     public async Task<IEnumerable<User>> GetAll()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Users!.ToListAsync();
     }
 
     public async Task Update(User entity)
     {
-        _context.Users.Update(entity);
+        _context.Users!.Update(entity);
         await _context.SaveChangesAsync();
     }
 

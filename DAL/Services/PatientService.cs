@@ -25,29 +25,29 @@ public class PatientService : DataServiceBase,
 
     public async Task Create(Patient entity)
     {
-        _context.Patients.Add(entity);
+        _context.Patients!.Add(entity);
         await _context.SaveChangesAsync();
     }
 
     public async Task<Patient?> GetById(object id)
     {
-        return await _context.Patients.FindAsync(id);
+        return await _context.Patients!.FindAsync(id);
     }
 
     public async Task<IEnumerable<Patient>> GetAll()
     {
-        return await _context.Patients.ToListAsync();
+        return await _context.Patients!.ToListAsync();
     }
 
     public async Task Update(Patient entity)
     {
-        _context.Patients.Update(entity);
+        _context.Patients!.Update(entity);
         await _context.SaveChangesAsync();
     }
 
     public async Task Delete(Patient entity)
     {
-        _context.Patients.Remove(entity);
+        _context.Patients!.Remove(entity);
        await _context.SaveChangesAsync();
     }
 

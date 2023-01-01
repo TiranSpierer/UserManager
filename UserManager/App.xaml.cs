@@ -13,7 +13,7 @@ namespace UserManager;
 
 public partial class App : Application
 {
-    public static    IHost?         AppHost { get; private set; }
+    private static   IHost?         _appHost;
     private readonly IConfiguration _configuration;
 
 #region Constrctor
@@ -21,7 +21,7 @@ public partial class App : Application
     public App()
     {
         _configuration = ConfigureBuilder();
-        AppHost        = ConfigureServices();
+        _appHost        = ConfigureServices();
     }
 
 #endregion
@@ -44,9 +44,9 @@ public partial class App : Application
         return Host.CreateDefaultBuilder()
                    .ConfigureServices((hostContext, services) =>
                                                              {
-                                                                 services.AddDbContext<DataBaseContext>(options => options.UseSqlite($"Data Source={connectionString}"));
                                                                  services.AddSingleton<MainWindow>();
-                                                                 services.AddDbContext<DataBaseContext>();
+
+                                                                 services.AddDbContext<DataBaseContext>(options => options.UseSqlite($"Data Source={connectionString}"));
                                                                  services.AddTransient<IDataService<User>, UserService>();
                                                                  services.AddTransient<IDataService<Patient>, PatientService>();
                                                                  services.AddTransient<IDataService<UserPrivilege>, UserPrivilegeService>();
@@ -60,12 +60,12 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        await AppHost!.StartAsync();
+        await _appHost!.StartAsync();
 
-        var initializer = AppHost.Services.GetRequiredService<IDatabaseInitializer>();
+        var initializer = _appHost.Services.GetRequiredService<IDatabaseInitializer>();
         initializer.Initialize();
 
-        var startupForm = AppHost.Services.GetRequiredService<MainWindow>();
+        var startupForm = _appHost.Services.GetRequiredService<MainWindow>();
         startupForm.Show();
 
         base.OnStartup(e);
@@ -73,7 +73,7 @@ public partial class App : Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        await AppHost!.StopAsync();
+        await _appHost!.StopAsync();
         base.OnExit(e);
     }
 
