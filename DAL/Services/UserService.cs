@@ -25,17 +25,24 @@ public class UserService : DataServiceBase,
 
     public async Task Create(User entity)
     {
-        await _context.Users!.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        if (string.IsNullOrEmpty(entity.Id) == false)
+        {
+            await _context.Users!.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public async Task <User?> GetById(object id)
+    public async Task <User?> GetById(object userId)
     {
-        return await _context.Users!
-                             .Include(u => u.UserPrivileges)
-                             .FirstOrDefaultAsync(u => u.Id == id as string);
+        User? user = null;
+        if (userId is string id)
+        {
+            user = await _context.Users!
+                                 .Include(u => u.UserPrivileges)
+                                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
 
-        //return await _context.Users!.FindAsync(id);
+        return user;
     }
 
     public async Task<IEnumerable<User>> GetAll()
@@ -56,19 +63,12 @@ public class UserService : DataServiceBase,
         }
     }
 
-    public async Task Delete(User entity)
-    {
-        //_context.Users.Remove(entity);
-        _context.Entry(entity).State = EntityState.Deleted;
-        await _context.SaveChangesAsync();
-
-    }
-
     public async Task Delete(object id)
     {
-        var entity = await GetById(id);
+        var entity      = await GetById(id);
+        var isIndelible = entity?.UserPrivileges!.Any(up => up.Privilege == Privilege.Indelible);
 
-        if (entity != null)
+        if (entity != null && isIndelible == false)
         {
             _context.Users!.Remove(entity);
             await _context.SaveChangesAsync();

@@ -27,6 +27,7 @@ public class DataBaseContext : DbContext
         UserPrivilegeBuilder(modelBuilder);
     }
 
+
     private static void UserBuilder(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()

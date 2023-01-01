@@ -41,6 +41,7 @@
             <Button Click="ButtonUpdate_OnClick" Width="auto" Height="auto" Content="Update" Margin="5"/>
             <Button Click="ButtonRemove_OnClick" Width="auto" Height="auto" Content="Remove" Margin="5"/>
             <Button Click="ButtonShowAll_OnClick" Width="auto" Height="auto" Content="ShowAll" Margin="5"/>
+            <Button Click="ButtonShowSpecific_OnClick" Width="auto" Height="auto" Content="ShowSpecific" Margin="5"/>
         </StackPanel>
 
         <StackPanel Grid.Row="0" Grid.Column="2">

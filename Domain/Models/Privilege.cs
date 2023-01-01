@@ -9,5 +9,6 @@ public enum Privilege
 {
     AddUsers,
     DeleteUsers,
-    EditUsers
+    EditUsers,
+    Indelible
 }

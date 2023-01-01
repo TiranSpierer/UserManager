@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DAL;
 using DAL.Services;
 using Domain.Models;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using UserManager.ViewModels;
-
 namespace UserManager;
 
 public partial class MainWindow : Window
 {
-    private readonly IDataService<User> _dataService;
-    public MainWindow(IDataService<User> dataService)
+    private readonly IDataService<User> _userDataService;
+    private readonly IDataService<UserPrivilege> _userPrivilegeDataService;
+
+    public MainWindow(IDataService<User> userDataService, IDataService<UserPrivilege> userPrivilegeDataService)
     {
         InitializeComponent();
-        _dataService = dataService;
-        DataContext  = new Workspace();
+        _userDataService          = userDataService;
+        _userPrivilegeDataService = userPrivilegeDataService;
+        DataContext               = new Workspace();
     }
 
 
@@ -28,7 +32,19 @@ public partial class MainWindow : Window
                        Name     = NameTextBox.Text,
                        Password = PasswordTextBox.Text
                    };
-        _dataService.Create(user);
+        _userDataService.Create(user);
+
+        foreach (var privilege in Enum.GetValues(typeof(Privilege)))
+        {
+            if ((Privilege) privilege != Privilege.Indelible && new Random().NextDouble() < 0.5)
+            {
+                _userPrivilegeDataService.Create(new UserPrivilege
+                                                 {
+                                                     UserId    = IdTextBox.Text,
+                                                     Privilege = (Privilege)privilege
+                                                 });
+            }
+        }
 
         Clean();
     }
@@ -41,20 +57,14 @@ public partial class MainWindow : Window
                        Name     = NameTextBox.Text,
                        Password = PasswordTextBox.Text
                    };
-        _dataService.Update(IdTextBox.Text, user);
+        _userDataService.Update(IdTextBox.Text, user);
 
         Clean();
     }
 
     private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
     {
-        var user = new User()
-                   {
-                       Id       = IdTextBox.Text,
-                       Name     = NameTextBox.Text,
-                       Password = PasswordTextBox.Text
-                   };
-        _dataService.Delete(user);
+        _userDataService.Delete(IdTextBox.Text);
 
         Clean();
     }
@@ -66,7 +76,7 @@ public partial class MainWindow : Window
 
     private async void ShowAll()
     {
-        var x = await _dataService.GetAll();
+        var x = await _userDataService.GetAll();
         foreach (var y in x)
         {
 
@@ -82,5 +92,16 @@ public partial class MainWindow : Window
         IdTextBox.Text       = string.Empty;
         NameTextBox.Text     = string.Empty;
         PasswordTextBox.Text = string.Empty;
+    }
+
+    private async void ButtonShowSpecific_OnClick(object sender, RoutedEventArgs e)
+    {
+        var user = await _userDataService.GetById(IdTextBox.Text);
+
+        IdTextBlock.Text       = user?.Id;
+        NameTextBlock.Text     = user?.Name;
+        PasswordTextBlock.Text = user?.Password;
+
+        Clean();
     }
 }

@@ -3,8 +3,10 @@
 // Created at 29/12/2022
 // Class propose:
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Domain.Models;
 
 namespace DAL;
@@ -13,9 +15,11 @@ public class DatabaseInitializer : IDatabaseInitializer
 {
     #region Privates
 
+    private const string DEFAULT_ADMIN_NAME = "Administrator";
+    private const string DEFAULT_ADMIN_PASSWORD = "ENadpass";
     private readonly DataBaseContext _context;
 
-    #endregion
+#endregion
 
     #region Constructors
 
@@ -40,30 +44,19 @@ public class DatabaseInitializer : IDatabaseInitializer
 
     private void CreateDefaultUser()
     {
-        if (_context.Users!.Find("Admin") == null)
+        if (_context.Users!.Find(DEFAULT_ADMIN_NAME) == null)
         {
             var user = new User
                        {
-                           Id       = "Admin",
-                           Name     = "Tiran",
-                           Password = "ENadpass"
-                       };
-            var privileges = new List<Privilege>
-                             {
-                                 Privilege.AddUsers,
-                                 Privilege.DeleteUsers,
-                                 Privilege.EditUsers
-                             };
-            foreach (var privilege in privileges)
-            {
-                var userPrivilege = new UserPrivilege
-                                    {
-                                        UserId    = user.Id,
-                                        Privilege = privilege
-                                    };
-                _context.UserPrivileges?.Add(userPrivilege);
-            }
+                           Id       = DEFAULT_ADMIN_NAME,
+                           Name     = DEFAULT_ADMIN_NAME,
+                           Password = DEFAULT_ADMIN_PASSWORD
+            };
+            var userPrivileges = Enum.GetValues(typeof(Privilege))
+                                     .Cast<Privilege>()
+                                     .Select(p => new UserPrivilege { UserId = user.Id, Privilege = p });
 
+            _context.UserPrivileges!.AddRange(userPrivileges);
             _context.Users?.Add(user);
             _context.SaveChanges();
         }

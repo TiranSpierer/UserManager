@@ -81,7 +81,6 @@ public class LoginViewModel : ViewModelBase
         // If the user exists and the password is correct, log in the user.
         // You can use the INotifyPropertyChanged interface to notify the view when the user is logged in.
         IsLoggedIn = true;
-        
     }
 
     #endregion
