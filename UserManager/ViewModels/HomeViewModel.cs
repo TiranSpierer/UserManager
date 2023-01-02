@@ -3,37 +3,44 @@
 // Created at 26/12/2022
 // Class propose:
 
+using Prism.Commands;
+using UserManager.Navigation;
+
 namespace UserManager.ViewModels;
 
 public class HomeViewModel : ViewModelBase
 {
 #region Privates
 
-
-
-#endregion
-
-#region Constructors
-
-
+    private readonly INavigationService _navigationService;
 
 #endregion
 
-#region Public Properties
+    #region Constructors
 
-
-
-#endregion
-
-#region Public Methods
+    public HomeViewModel(INavigationService navigationService)
+    {
+        _navigationService = navigationService;
+    }
 
 
 
 #endregion
 
-#region Private Methods
+    #region Public Properties
+    
+
+
+    #endregion
+
+    #region Public Methods
 
 
 
-#endregion
+    #endregion
+
+    #region Private Methods
+
+
+    #endregion
 }

@@ -4,6 +4,7 @@
 // Class propose:
 
 using System;
+using System.Threading.Tasks;
 using DAL.Services;
 using Domain.Models;
 using Prism.Commands;
@@ -18,12 +19,13 @@ public class LoginViewModel : ViewModelBase
     private readonly IDataService<User> _userService;
     private readonly INavigationService _navigationService;
 
-    private string _errorMessage;
-    private string _password;
-    private string _username;
-    private bool   _isLoggedIn;
+    private string? _errorMessage;
+    private string? _password;
+    private string? _username;
+    private bool    _isLoggedIn;
+    private bool    _canExecuteLoginCommand;
 
-    #endregion
+#endregion
 
     #region Constructors
 
@@ -31,15 +33,25 @@ public class LoginViewModel : ViewModelBase
     {
         _userService       = userService;
         _navigationService = navigationService;
-        LoginCommand       = new DelegateCommand(OnLoginAsync);
+        LoginCommand       = new DelegateCommand(ExecuteLoginCommandAsync).ObservesCanExecute(() => CanExecuteLoginCommand);
+        RegisterCommand    = new DelegateCommand(ExecuteRegisterCommand);
         Password           = string.Empty;
     }
 
 #endregion
 
-#region Public Properties
+    #region Public Properties
 
-    public string ErrorMessage
+    public DelegateCommand LoginCommand    { get; }
+    public DelegateCommand RegisterCommand { get; }
+
+    public bool CanExecuteLoginCommand
+    {
+        get => _canExecuteLoginCommand;
+        set => SetProperty(ref _canExecuteLoginCommand, value);
+    }
+
+    public string? ErrorMessage
     {
         get => _errorMessage;
         set => SetProperty(ref _errorMessage, value);
@@ -51,38 +63,47 @@ public class LoginViewModel : ViewModelBase
         set => SetProperty(ref _isLoggedIn, value);
     }
 
-    public string Password
+    public string? Password
     {
         get => _password;
-        set => SetProperty(ref _password, value);
+        set
+        {
+            SetProperty(ref _password, value);
+            Task.Run(CanExecuteLoginCommandAsync);
+        }
     }
 
-    public DelegateCommand LoginCommand { get; }
-
-    public string Username
+    public string? Username
     {
         get => _username;
-        set => SetProperty(ref _username, value);
+        set
+        {
+            SetProperty(ref _username, value);
+            Task.Run(CanExecuteLoginCommandAsync);
+        }
     }
 
     #endregion
 
     #region Private Methods
 
-    private async void OnLoginAsync()
+    private void ExecuteLoginCommandAsync()
     {
-        var user = await _userService.GetById(Username);
-
-        if (user == null || user.Password != Password)
-        {
-            // Display an error message if the user doesn't exist or the password is incorrect.
-            // You can use the INotifyPropertyChanged interface to notify the view when the error message should be displayed.
-            ErrorMessage = "Invalid username or password.";
-            return;
-        }
-
         IsLoggedIn = true;
-        
+        _navigationService.NavigateTo(new HomeViewModel(_navigationService));
+    }
+
+    private async Task CanExecuteLoginCommandAsync()
+    {
+        var user = await _userService.GetById(Username!);
+
+        CanExecuteLoginCommand = user != null && user.Password == Password;
+    }
+
+
+
+    private void ExecuteRegisterCommand()
+    {
         _navigationService.NavigateTo(new RegisterViewModel());
     }
 

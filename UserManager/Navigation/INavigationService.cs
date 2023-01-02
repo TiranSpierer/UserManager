@@ -4,12 +4,16 @@
 // Class propose:
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UserManager.ViewModels;
 
 namespace UserManager.Navigation;
 
 public interface INavigationService
 {
-    ViewModelBase CurrentViewModel { get; set; }
+    ViewModelBase? CurrentViewModel { get; set; }
+    Stack<ViewModelBase?>        PreviousViewModel { get; set; }
     void          NavigateTo(ViewModelBase viewModel);
+    void          NavigateBack();
 }

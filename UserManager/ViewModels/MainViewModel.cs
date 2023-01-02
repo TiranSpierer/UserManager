@@ -53,7 +53,7 @@ public class MainViewModel : ViewModelBase
 
     private void OnNavigationChanged()
     {
-        CurrentViewModel = _navigationService.CurrentViewModel;
+        CurrentViewModel = _navigationService.CurrentViewModel!;
     }
 
 #endregion

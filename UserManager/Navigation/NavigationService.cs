@@ -4,6 +4,7 @@
 // Class propose:
 
 using System;
+using System.Collections.Generic;
 using UserManager.ViewModels;
 using Prism.Events;
 using EventAggregator;
@@ -12,22 +13,26 @@ namespace UserManager.Navigation;
 
 public class NavigationService : INavigationService
 {
-    private readonly IEventAggregator _ea;
-    public           ViewModelBase    CurrentViewModel { get; set; }
+    private readonly IEventAggregator      _ea;
+    public           ViewModelBase?        CurrentViewModel  { get; set; }
+    public           Stack<ViewModelBase?> PreviousViewModel { get; set; }
 
     public NavigationService(IEventAggregator ea)
     {
-        _ea = ea;
+        PreviousViewModel = new Stack<ViewModelBase?>();
+        _ea               = ea;
     }
 
     public void NavigateTo(ViewModelBase viewModel)
     {
+        PreviousViewModel.Push(CurrentViewModel);
         CurrentViewModel = viewModel;
         _ea.GetEvent<NavigationChangedEvent>().Publish();
     }
 
-    private void Dispose()
+    public void NavigateBack()
     {
-        CurrentViewModel.Dispose();
+        CurrentViewModel = PreviousViewModel.Pop();
+        _ea.GetEvent<NavigationChangedEvent>().Publish();
     }
 }
