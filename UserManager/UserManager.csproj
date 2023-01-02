@@ -13,8 +13,6 @@
 
   <ItemGroup>
     <Folder Include="HostBuilders\" />
-    <Folder Include="Converters\" />
-    <Folder Include="State\Navigators\" />
     <Folder Include="Styles\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
@@ -29,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\EventAggregator\EventAggregator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

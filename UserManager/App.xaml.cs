@@ -28,6 +28,7 @@ public partial class App : Application
                    .AddDbContext()
                    .AddServices()
                    .AddViewModels()
+                   .AddViews()
                    .Build();
     }
 

@@ -6,12 +6,12 @@
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="700" MinWidth="1000" Width="1000">
 
-    <!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <ContentControl Content="{Binding CurrentViewModel}"/>
-    </ScrollViewer>-->
+    </ScrollViewer>
     
     
-    <Grid>
+    <!--<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -48,9 +48,9 @@
             <TextBlock x:Name="IdTextBlock" Text="ID " FontSize="32" HorizontalAlignment="Center"/>
             <TextBlock x:Name="NameTextBlock" Text="Name " FontSize="32" HorizontalAlignment="Center"/>
             <TextBlock x:Name="PasswordTextBlock" Text="Password " FontSize="32" HorizontalAlignment="Center"/>
-        </StackPanel>
+        </StackPanel>-->
 
 
 
-    </Grid>
+    <!--</Grid>-->
 </Window>

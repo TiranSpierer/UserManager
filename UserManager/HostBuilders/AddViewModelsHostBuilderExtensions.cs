@@ -4,8 +4,12 @@
 // Class propose:
 
 using System;
+using DAL.Services;
+using Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Prism.Events;
+using UserManager.Navigation;
 using UserManager.ViewModels;
 
 namespace UserManager.HostBuilders;
@@ -16,39 +20,11 @@ public static class AddViewModelsHostBuilderExtensions
     {
         host.ConfigureServices(services =>
                                {
-                                   services.AddSingleton<MainWindow>();
-
-                                   //services.AddSingleton<CreateViewModel<HomeViewModel>>(services => () => services.GetRequiredService<HomeViewModel>());
-                                   //services.AddSingleton<CreateViewModel<LoginViewModel>>(services => () => CreateLoginViewModel(services));
-                                   //services.AddSingleton<CreateViewModel<RegisterViewModel>>(services => () => CreateRegisterViewModel(services));
-
-                                   //services.AddSingleton<ISimpleTraderViewModelFactory, SimpleTraderViewModelFactory>();
-
-                                   //services.AddSingleton<ViewModelDelegateRenavigator<HomeViewModel>>();
-                                   //services.AddSingleton<ViewModelDelegateRenavigator<LoginViewModel>>();
-                                   //services.AddSingleton<ViewModelDelegateRenavigator<RegisterViewModel>>();
+                                   services.AddTransient<MainViewModel>();
+                                   services.AddTransient<LoginViewModel>();
+                                   services.AddTransient<RegisterViewModel>();
                                });
 
         return host;
     }
-
-    //private static HomeViewModel CreateHomeViewModel(IServiceProvider services)
-    //{
-    //    return new HomeViewModel(
-    //                             );
-    //}
-
-    //private static LoginViewModel CreateLoginViewModel(IServiceProvider services)
-    //{
-    //    return new LoginViewModel(
-    //                              services.GetRequiredService<ViewModelDelegateRenavigator<HomeViewModel>>(),
-    //                              services.GetRequiredService<ViewModelDelegateRenavigator<RegisterViewModel>>());
-    //}
-
-    //private static RegisterViewModel CreateRegisterViewModel(IServiceProvider services)
-    //{
-    //    return new RegisterViewModel(
-    //                                 services.GetRequiredService<ViewModelDelegateRenavigator<LoginViewModel>>(),
-    //                                 services.GetRequiredService<ViewModelDelegateRenavigator<LoginViewModel>>());
-    //}
 }

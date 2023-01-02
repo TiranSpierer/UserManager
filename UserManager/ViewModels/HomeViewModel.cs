@@ -5,7 +5,7 @@
 
 namespace UserManager.ViewModels;
 
-public class HomeViewModel
+public class HomeViewModel : ViewModelBase
 {
 #region Privates
 

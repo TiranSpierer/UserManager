@@ -3,11 +3,10 @@
 // Created at 26/12/2022
 // Class propose:
 
-using System;
-using System.Threading.Tasks;
 using DAL.Services;
 using Domain.Models;
 using Prism.Commands;
+using UserManager.Navigation;
 
 namespace UserManager.ViewModels;
 
@@ -16,20 +15,23 @@ public class LoginViewModel : ViewModelBase
 #region Privates
 
     private readonly IDataService<User> _userService;
+    private readonly INavigationService _navigationService;
 
     private string _errorMessage;
-    private bool   _isLoggedIn;
     private string _password;
     private string _username;
+    private bool   _isLoggedIn;
 
-#endregion
+    #endregion
 
-#region Constructors
+    #region Constructors
 
-    public LoginViewModel(IDataService<User> userService)
+    public LoginViewModel(IDataService<User> userService, INavigationService navigationService)
     {
-        _userService = userService;
-        LoginCommand      = new DelegateCommand(OnLoginAsync);
+        _userService       = userService;
+        _navigationService = navigationService;
+        LoginCommand       = new DelegateCommand(OnLoginAsync);
+        Password           = string.Empty;
     }
 
 #endregion
@@ -78,9 +80,8 @@ public class LoginViewModel : ViewModelBase
             return;
         }
 
-        // If the user exists and the password is correct, log in the user.
-        // You can use the INotifyPropertyChanged interface to notify the view when the user is logged in.
         IsLoggedIn = true;
+        _navigationService.NavigateTo(new RegisterViewModel());
     }
 
     #endregion
