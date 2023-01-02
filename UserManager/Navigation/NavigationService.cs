@@ -25,4 +25,9 @@ public class NavigationService : INavigationService
         CurrentViewModel = viewModel;
         _ea.GetEvent<NavigationChangedEvent>().Publish();
     }
+
+    private void Dispose()
+    {
+        CurrentViewModel.Dispose();
+    }
 }

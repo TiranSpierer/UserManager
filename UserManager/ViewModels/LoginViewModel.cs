@@ -3,6 +3,7 @@
 // Created at 26/12/2022
 // Class propose:
 
+using System;
 using DAL.Services;
 using Domain.Models;
 using Prism.Commands;
@@ -81,8 +82,10 @@ public class LoginViewModel : ViewModelBase
         }
 
         IsLoggedIn = true;
+        
         _navigationService.NavigateTo(new RegisterViewModel());
     }
 
     #endregion
+
 }

@@ -17,6 +17,7 @@ public class MainViewModel : ViewModelBase
     private readonly IEventAggregator   _ea;
     private readonly INavigationService _navigationService;
     private          ViewModelBase      _currentViewModel;
+    private readonly SubscriptionToken  _subscriptionToken;
 
 #endregion
 
@@ -27,7 +28,7 @@ public class MainViewModel : ViewModelBase
         _navigationService = navigationService;
         _ea                = ea;
         _currentViewModel  = currentViewModel;
-        _ea.GetEvent<NavigationChangedEvent>().Subscribe(OnNavigationChanged);
+        _subscriptionToken = _ea.GetEvent<NavigationChangedEvent>().Subscribe(OnNavigationChanged);
     }
 
 #endregion
@@ -56,4 +57,14 @@ public class MainViewModel : ViewModelBase
     }
 
 #endregion
+
+#region Overrides of ViewModelBase
+
+    public override void Dispose()
+    {
+        _ea.GetEvent<NavigationChangedEvent>().Unsubscribe(_subscriptionToken);
+    }
+
+#endregion
+
 }
