@@ -15,7 +15,7 @@ namespace UserManager.ViewModels;
 public class LoginViewModel : ViewModelBase
 {
 #region Privates
-
+    
     private readonly IDataService<User> _userService;
     private readonly INavigationService _navigationService;
 
@@ -29,7 +29,7 @@ public class LoginViewModel : ViewModelBase
 
     #region Constructors
 
-    public LoginViewModel(IDataService<User> userService, INavigationService navigationService)
+    public LoginViewModel(IDataService<User> userService, NavigationService<RegisterViewModel> navigationService)
     {
         _userService       = userService;
         _navigationService = navigationService;
@@ -90,7 +90,7 @@ public class LoginViewModel : ViewModelBase
     private void ExecuteLoginCommandAsync()
     {
         IsLoggedIn = true;
-        _navigationService.NavigateTo(new HomeViewModel(_navigationService));
+        _navigationService.Navigate();
     }
 
     private async Task CanExecuteLoginCommandAsync()
@@ -100,11 +100,9 @@ public class LoginViewModel : ViewModelBase
         CanExecuteLoginCommand = user != null && user.Password == Password;
     }
 
-
-
     private void ExecuteRegisterCommand()
     {
-        _navigationService.NavigateTo(new RegisterViewModel());
+        _navigationService.Navigate();
     }
 
     #endregion

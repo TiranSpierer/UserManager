@@ -14,20 +14,20 @@ public class MainViewModel : ViewModelBase
 {
 #region Privates
 
-    private readonly IEventAggregator   _ea;
-    private readonly INavigationService _navigationService;
-    private          ViewModelBase      _currentViewModel;
-    private readonly SubscriptionToken  _subscriptionToken;
+    private readonly Navigator   _navigator;
+    private readonly IEventAggregator  _ea;
+    private          ViewModelBase?    _currentViewModel;
+    private readonly SubscriptionToken _subscriptionToken;
 
 #endregion
 
 #region Constructors
 
-    public MainViewModel(INavigationService navigationService, IEventAggregator ea, LoginViewModel currentViewModel)
+    public MainViewModel(Navigator navigator, IEventAggregator ea)
     {
-        _navigationService = navigationService;
+        _navigator   = navigator;
+        CurrentViewModel   = _navigator.CurrentViewModel;
         _ea                = ea;
-        _currentViewModel  = currentViewModel;
         _subscriptionToken = _ea.GetEvent<NavigationChangedEvent>().Subscribe(OnNavigationChanged);
     }
 
@@ -35,7 +35,7 @@ public class MainViewModel : ViewModelBase
 
 #region Public Properties
 
-    public ViewModelBase CurrentViewModel
+    public ViewModelBase? CurrentViewModel
     {
         get => _currentViewModel;
         set => SetProperty(ref _currentViewModel, value);
@@ -53,7 +53,7 @@ public class MainViewModel : ViewModelBase
 
     private void OnNavigationChanged()
     {
-        CurrentViewModel = _navigationService.CurrentViewModel!;
+        CurrentViewModel = _navigator.CurrentViewModel!;
     }
 
 #endregion

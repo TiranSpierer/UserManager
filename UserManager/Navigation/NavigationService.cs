@@ -6,33 +6,22 @@
 using System;
 using System.Collections.Generic;
 using UserManager.ViewModels;
-using Prism.Events;
-using EventAggregator;
 
 namespace UserManager.Navigation;
 
-public class NavigationService : INavigationService
+public class NavigationService<TViewModel> : INavigationService where TViewModel : ViewModelBase
 {
-    private readonly IEventAggregator      _ea;
-    public           ViewModelBase?        CurrentViewModel  { get; set; }
-    public           Stack<ViewModelBase?> PreviousViewModel { get; set; }
+    private readonly Navigator  _navigator;
+    private readonly Func<TViewModel> _createViewModel;
 
-    public NavigationService(IEventAggregator ea)
+    public NavigationService(Navigator navigator, Func<TViewModel> createViewModel)
     {
-        PreviousViewModel = new Stack<ViewModelBase?>();
-        _ea               = ea;
+        _navigator = navigator;
+        _createViewModel = createViewModel;
     }
 
-    public void NavigateTo(ViewModelBase viewModel)
+    public void Navigate()
     {
-        PreviousViewModel.Push(CurrentViewModel);
-        CurrentViewModel = viewModel;
-        _ea.GetEvent<NavigationChangedEvent>().Publish();
-    }
-
-    public void NavigateBack()
-    {
-        CurrentViewModel = PreviousViewModel.Pop();
-        _ea.GetEvent<NavigationChangedEvent>().Publish();
+        _navigator.CurrentViewModel = _createViewModel();
     }
 }

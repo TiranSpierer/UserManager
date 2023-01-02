@@ -18,7 +18,7 @@ public class HomeViewModel : ViewModelBase
 
     #region Constructors
 
-    public HomeViewModel(INavigationService navigationService)
+    public HomeViewModel(NavigationService<LoginViewModel> navigationService)
     {
         _navigationService = navigationService;
     }

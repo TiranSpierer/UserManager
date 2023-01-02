@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using DAL;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UserManager.HostBuilders;
+using UserManager.Navigation;
+using UserManager.ViewModels;
 
 namespace UserManager;
 
@@ -40,11 +43,11 @@ public partial class App : Application
     {
         await _appHost!.StartAsync();
 
-        var initializer = _appHost.Services.GetRequiredService<IDatabaseInitializer>();
-        initializer.Initialize();
+        _appHost.Services.GetRequiredService<IDatabaseInitializer>().Initialize();
 
-        var startupForm = _appHost.Services.GetRequiredService<MainWindow>();
-        startupForm.Show();
+        //_appHost.Services.GetRequiredService<INavigationService>().Navigate();
+
+        _appHost.Services.GetRequiredService<MainWindow>().Show();
 
         base.OnStartup(e);
     }
