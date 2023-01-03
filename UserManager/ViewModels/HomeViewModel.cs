@@ -20,6 +20,9 @@ public class HomeViewModel : ViewModelBase
 
     private readonly DataServiceWrapper _dataService;
     private readonly INavigationService _navigationService;
+    private          User?              _selectedUser;
+    private          bool               _canExecuteEditCommand;
+    private          bool               _canExecuteRemoveCommand;
 
 #endregion
 
@@ -28,18 +31,50 @@ public class HomeViewModel : ViewModelBase
     public HomeViewModel(DataServiceWrapper dataService, INavigationService navigationService)
     {
         _navigationService  = navigationService;
-        _dataService   = dataService;
+        _dataService        = dataService;
+
         NavigateBackCommand = new DelegateCommand(ExecuteNavigateBack);
-        Users = new ObservableCollection<User>();
-        _ = InitTable();
+        EditUserCommand     = new DelegateCommand(ExecuteEditUser).ObservesCanExecute(() => CanExecuteEditCommand);
+        RemoveUsersCommand  = new DelegateCommand(ExecuteRemoveUsers).ObservesCanExecute(() => CanExecuteRemoveCommand);
+        AddUserCommand      = new DelegateCommand(ExecuteAddUser);
+
+        Users               = new ObservableCollection<User>();
+        _                   = InitTable();
     }
+
+
 
 #endregion
 
     #region Public Properties
     
-    public DelegateCommand NavigateBackCommand { get; }
-    public ObservableCollection<User> Users { get; set; }
+    public DelegateCommand            EditUserCommand     { get; }
+    public DelegateCommand            RemoveUsersCommand  { get; }
+    public DelegateCommand            AddUserCommand      { get; }
+    public DelegateCommand            NavigateBackCommand { get; }
+    public ObservableCollection<User> Users               { get; set; }
+
+    public User? SelectedUser
+    {
+        get => _selectedUser;
+        set
+        {
+            SetProperty(ref _selectedUser, value);
+            CanExecuteRemoveCommand = CanExecuteEditCommand = value != null;
+        }
+    }
+
+    public bool CanExecuteRemoveCommand
+    {
+        get => _canExecuteRemoveCommand;
+        set => SetProperty(ref _canExecuteRemoveCommand, value);
+    }
+
+    public bool CanExecuteEditCommand
+    {
+        get => _canExecuteEditCommand;
+        set => SetProperty(ref _canExecuteEditCommand, value);
+    }
 
     #endregion
 
@@ -53,7 +88,7 @@ public class HomeViewModel : ViewModelBase
 
     private void ExecuteNavigateBack()
     {
-        _navigationService.Navigate(new LoginViewModel(_dataService, _navigationService));
+        _navigationService.NavigateBack();
     }
 
     private async Task InitTable()
@@ -64,6 +99,22 @@ public class HomeViewModel : ViewModelBase
         {
             Users.Add(user);
         }
+    }
+
+    private void ExecuteAddUser()
+    {
+        _navigationService.NavigateTo(new RegisterViewModel(_dataService, _navigationService));
+    }
+
+    private async void ExecuteRemoveUsers()
+    {
+        await _dataService.UserService.Delete(SelectedUser!.Id);
+        await InitTable();
+    }
+
+    private void ExecuteEditUser()
+    {
+        _navigationService.NavigateTo(new EditUserViewModel(_dataService, _navigationService, username: SelectedUser!.Id));
     }
 
     #endregion

@@ -49,7 +49,9 @@ public class UserService : DataServiceBase,
 
     public async Task<IEnumerable<User>> GetAll()
     {
-        return await _context.Users!.ToListAsync();
+        return await _context.Users!
+                             .Include(u => u.UserPrivileges)
+                             .ToListAsync();
     }
 
     public async Task Update(object id, User updatedEntity)
@@ -58,10 +60,18 @@ public class UserService : DataServiceBase,
 
         if (entity != null)
         {
-            entity.Name = updatedEntity.Name;
-            entity.Password = updatedEntity.Password;
-            _context.Users!.Update(entity);
-            await _context.SaveChangesAsync();
+            if (entity.Id == updatedEntity.Id)
+            {
+                entity.Name     = updatedEntity.Name;
+                entity.Password = updatedEntity.Password;
+                _context.Users!.Update(entity);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                await Delete(entity.Id);
+                await Create(updatedEntity);
+            }
         }
     }
 

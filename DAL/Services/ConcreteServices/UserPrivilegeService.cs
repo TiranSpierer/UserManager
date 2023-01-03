@@ -4,6 +4,7 @@
 // Class propose:
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,6 +32,27 @@ public class UserPrivilegeService : DataServiceBase,
     {
         await _context.UserPrivileges!.AddAsync(entity);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task CreateRange(IEnumerable<UserPrivilege> userPrivileges)
+    {
+        await _context.UserPrivileges!.AddRangeAsync(userPrivileges);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task CreateRange(string userId, IEnumerable<Privilege> privileges)
+    {
+        var userPrivileges = new List<UserPrivilege>();
+
+        foreach (var privilege in privileges)
+        {
+            userPrivileges.Add(new UserPrivilege()
+                               {
+                UserId = userId,
+                Privilege = privilege
+                               });
+        }
+        await CreateRange(userPrivileges);
     }
 
     public async Task<UserPrivilege?> GetById(object compositeId)

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace UserManager.Views
 {
     /// <summary>
-    /// Interaction logic for EditOperatorsView.xaml
+    /// Interaction logic for EditUserView.xaml
     /// </summary>
-    public partial class EditOperatorsView : UserControl
+    public partial class EditUserView : UserControl
     {
-        public EditOperatorsView()
+        public EditUserView()
         {
             InitializeComponent();
         }

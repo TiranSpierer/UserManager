@@ -13,12 +13,14 @@ namespace UserManager.Navigation;
 
 public class NavigationService : INavigationService
 {
-    private readonly IEventAggregator _ea;
-    private          ViewModelBase?   _currentViewModel;
+    private readonly IEventAggregator     _ea;
+    private          ViewModelBase?       _currentViewModel;
+    private readonly Stack<ViewModelBase> _previousViewModels;
 
     public NavigationService(IEventAggregator ea)
     {
-        _ea   = ea;
+        _ea                 = ea;
+        _previousViewModels = new Stack<ViewModelBase>();
     }
 
     public ViewModelBase? CurrentViewModel
@@ -32,10 +34,17 @@ public class NavigationService : INavigationService
         }
     }
 
-
-    public void Navigate(ViewModelBase viewModel)
+    public void NavigateTo(ViewModelBase viewModel)
     {
+        _previousViewModels.Push(CurrentViewModel!);
         CurrentViewModel = viewModel;
     }
 
+    public void NavigateBack()
+    {
+        if (_previousViewModels.Count > 0)
+        {
+            CurrentViewModel = _previousViewModels.Pop();
+        }
+    }
 }

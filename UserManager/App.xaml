@@ -24,8 +24,8 @@
                 <views:RegisterView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewmodels:EditOperatorsViewModel}">
-                <views:EditOperatorsView />
+            <DataTemplate DataType="{x:Type viewmodels:EditUserViewModel}">
+                <views:EditUserView />
             </DataTemplate>
 
         </ResourceDictionary>

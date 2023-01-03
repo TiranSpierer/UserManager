@@ -91,7 +91,7 @@ public class LoginViewModel : ViewModelBase
     private void ExecuteLoginCommandAsync()
     {
         IsLoggedIn = true;
-        _navigationService.Navigate(new HomeViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService));
     }
 
     private async Task CanExecuteLoginCommandAsync()
@@ -103,7 +103,7 @@ public class LoginViewModel : ViewModelBase
 
     private void ExecuteRegisterCommand()
     {
-        _navigationService.Navigate(new RegisterViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new RegisterViewModel(_dataService, _navigationService));
     }
 
     #endregion

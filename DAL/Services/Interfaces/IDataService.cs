@@ -3,6 +3,7 @@
 // Created at 28/12/2022
 // Class propose:
 
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

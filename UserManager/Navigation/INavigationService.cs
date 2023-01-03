@@ -12,6 +12,8 @@ namespace UserManager.Navigation;
 
 public interface INavigationService
 {
-    ViewModelBase? CurrentViewModel { get; set; }
-    void Navigate(ViewModelBase viewModel);
+    ViewModelBase?       CurrentViewModel    { get; set; }
+    void                 NavigateTo(ViewModelBase viewModel);
+    void                 NavigateBack();
+
 }

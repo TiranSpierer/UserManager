@@ -3,6 +3,8 @@
 // Created at 26/12/2022
 // Class propose:
 
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DAL.Services.Interfaces;
 using DAL.Services.Wrapper;
 using Domain.Models;
@@ -22,8 +24,10 @@ public class RegisterViewModel : ViewModelBase
     private string? _password;
     private string? _username;
     private string? _name;
-    private bool    z;
     private bool    _canExecuteRegisterCommand;
+    private bool    _isAddUsersSelected;
+    private bool    _isDeleteUsersSelected;
+    private bool    _isEditUsersSelected;
 
 #endregion
 
@@ -33,16 +37,20 @@ public class RegisterViewModel : ViewModelBase
     {
         _dataService       = dataService;
         _navigationService = navigationService;
+        SelectedPrivileges = new HashSet<Privilege>();
         RegisterCommand    = new DelegateCommand(ExecuteRegisterCommandAsync).ObservesCanExecute(() => CanExecuteRegisterCommand);
         GoBackCommand      = new DelegateCommand(ExecuteGoBackCommand);
         Password           = string.Empty;
     }
 
-#endregion
+    #endregion
 
     #region Public Properties
 
-    public DelegateCommand RegisterCommand { get; }
+
+    public HashSet<Privilege> SelectedPrivileges { get; set; }
+
+    public DelegateCommand                 RegisterCommand { get; }
 
     public DelegateCommand GoBackCommand { get; }
 
@@ -74,7 +82,37 @@ public class RegisterViewModel : ViewModelBase
         }
     }
 
-    #endregion
+    public bool IsAddUsersSelected
+    {
+        get => _isAddUsersSelected;
+        set
+        {
+            SetProperty(ref _isAddUsersSelected, value);
+            UpdatePrivilegesList(Privilege.AddUsers, value);
+        }
+    }
+
+    public bool IsDeleteUsersSelected
+    {
+        get => _isDeleteUsersSelected;
+        set
+        {
+            SetProperty(ref _isDeleteUsersSelected, value);
+            UpdatePrivilegesList(Privilege.DeleteUsers, value);
+        }
+    }
+
+    public bool IsEditUsersSelected
+    {
+        get => _isEditUsersSelected;
+        set
+        {
+            SetProperty(ref _isEditUsersSelected, value);
+            UpdatePrivilegesList(Privilege.EditUsers, value);
+        }
+    }
+
+#endregion
 
     #region Public Methods
 
@@ -84,9 +122,18 @@ public class RegisterViewModel : ViewModelBase
 
     #region Private Methods
 
+    private void UpdatePrivilegesList(Privilege privilege, bool isSelected)
+    {
+
+        if (isSelected)
+            SelectedPrivileges.Add(privilege);
+        else
+            SelectedPrivileges.Remove(privilege);
+    }
+
     private void ExecuteGoBackCommand()
     {
-        _navigationService.Navigate(new LoginViewModel(_dataService, _navigationService));
+        _navigationService.NavigateBack();
     }
 
     private async void ExecuteRegisterCommandAsync()
@@ -99,7 +146,8 @@ public class RegisterViewModel : ViewModelBase
                    };
 
         await _dataService.UserService.Create(user);
-        _navigationService.Navigate(new LoginViewModel(_dataService, _navigationService));
+        await CreateUserPrivileges(user.Id);
+        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService));
     }
 
     private async void CanExecuteRegisterCommandAsync()
@@ -111,6 +159,18 @@ public class RegisterViewModel : ViewModelBase
         else
         {
             CanExecuteRegisterCommand = false;
+        }
+    }
+
+    public async Task CreateUserPrivileges(string userId)
+    {
+        foreach (var privilege in SelectedPrivileges)
+        {
+            await _dataService.UserPrivilegeService.Create(new UserPrivilege()
+                                                           {
+                                                               UserId    = userId,
+                                                               Privilege = privilege
+                                                           });
         }
     }
 
