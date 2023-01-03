@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using Domain.Models;
 
-namespace DAL;
+namespace DAL.Setup;
 
 public class DatabaseInitializer : IDatabaseInitializer
 {
@@ -19,7 +19,7 @@ public class DatabaseInitializer : IDatabaseInitializer
     private const string DEFAULT_ADMIN_PASSWORD = "ENadpass";
     private readonly DataBaseContext _context;
 
-#endregion
+    #endregion
 
     #region Constructors
 
@@ -30,7 +30,7 @@ public class DatabaseInitializer : IDatabaseInitializer
 
     #endregion
 
-#region Public Methods
+    #region Public Methods
 
     public void Initialize()
     {
@@ -40,17 +40,17 @@ public class DatabaseInitializer : IDatabaseInitializer
 
     #endregion
 
-#region Private Methods
+    #region Private Methods
 
     private void CreateDefaultUser()
     {
         if (_context.Users!.Find(DEFAULT_ADMIN_NAME) == null)
         {
             var user = new User
-                       {
-                           Id       = DEFAULT_ADMIN_NAME,
-                           Name     = DEFAULT_ADMIN_NAME,
-                           Password = DEFAULT_ADMIN_PASSWORD
+            {
+                Id = DEFAULT_ADMIN_NAME,
+                Name = DEFAULT_ADMIN_NAME,
+                Password = DEFAULT_ADMIN_PASSWORD
             };
             var userPrivileges = Enum.GetValues(typeof(Privilege))
                                      .Cast<Privilege>()
@@ -62,5 +62,5 @@ public class DatabaseInitializer : IDatabaseInitializer
         }
     }
 
-#endregion
+    #endregion
 }

@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DAL.Services.Interfaces;
+using DAL.Setup;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 

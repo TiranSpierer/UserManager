@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="HostBuilders\" />
+    <Folder Include="Converters\" />
     <Folder Include="Styles\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>

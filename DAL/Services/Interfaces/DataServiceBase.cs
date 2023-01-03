@@ -3,6 +3,8 @@
 // Created at 28/12/2022
 // Class propose:
 
+using DAL.Setup;
+
 namespace DAL.Services.Interfaces;
 
 public abstract class DataServiceBase

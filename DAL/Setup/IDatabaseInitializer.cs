@@ -3,7 +3,7 @@
 // Created at 29/12/2022
 // Class propose:
 
-namespace DAL;
+namespace DAL.Setup;
 
 public interface IDatabaseInitializer
 {

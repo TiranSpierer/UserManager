@@ -7,17 +7,17 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace DAL;
+namespace DAL.Setup;
 
 public class DataBaseContext : DbContext
 {
     public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
     {
-        
+
     }
 
-    public DbSet<User>?          Users          { get; set; }
-    public DbSet<Patient>?       Patients       { get; set; }
+    public DbSet<User>? Users { get; set; }
+    public DbSet<Patient>? Patients { get; set; }
     public DbSet<UserPrivilege>? UserPrivileges { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

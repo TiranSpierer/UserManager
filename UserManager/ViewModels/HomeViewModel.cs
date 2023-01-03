@@ -3,9 +3,12 @@
 // Created at 26/12/2022
 // Class propose:
 
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using DAL.Services.Wrapper;
+using Domain.Models;
 using Prism.Commands;
 using UserManager.Navigation;
 
@@ -27,6 +30,8 @@ public class HomeViewModel : ViewModelBase
         _navigationService  = navigationService;
         _dataService   = dataService;
         NavigateBackCommand = new DelegateCommand(ExecuteNavigateBack);
+        Users = new ObservableCollection<User>();
+        _ = InitTable();
     }
 
 #endregion
@@ -34,6 +39,7 @@ public class HomeViewModel : ViewModelBase
     #region Public Properties
     
     public DelegateCommand NavigateBackCommand { get; }
+    public ObservableCollection<User> Users { get; set; }
 
     #endregion
 
@@ -48,6 +54,16 @@ public class HomeViewModel : ViewModelBase
     private void ExecuteNavigateBack()
     {
         _navigationService.Navigate(new LoginViewModel(_dataService, _navigationService));
+    }
+
+    private async Task InitTable()
+    {
+        Users.Clear();
+        var freshUsers = await _dataService.UserService.GetAll();
+        foreach (var user in freshUsers)
+        {
+            Users.Add(user);
+        }
     }
 
     #endregion

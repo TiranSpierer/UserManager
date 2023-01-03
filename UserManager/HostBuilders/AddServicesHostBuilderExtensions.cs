@@ -4,10 +4,10 @@
 // Class propose:
 
 using System;
-using DAL;
 using DAL.Services.ConcreteServices;
 using DAL.Services.Interfaces;
 using DAL.Services.Wrapper;
+using DAL.Setup;
 using Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

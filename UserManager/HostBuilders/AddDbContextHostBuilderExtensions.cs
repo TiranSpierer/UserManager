@@ -7,6 +7,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using DAL;
+using DAL.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -10,6 +10,7 @@ using Domain.Models;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DAL.Services.Interfaces;
+using DAL.Setup;
 
 namespace DAL.Services.ConcreteServices;
 

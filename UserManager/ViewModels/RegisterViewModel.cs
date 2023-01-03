@@ -22,6 +22,8 @@ public class RegisterViewModel : ViewModelBase
     private string? _password;
     private string? _username;
     private string? _name;
+    private bool    z;
+    private bool    _canExecuteRegisterCommand;
 
 #endregion
 
@@ -32,18 +34,23 @@ public class RegisterViewModel : ViewModelBase
         _dataService       = dataService;
         _navigationService = navigationService;
         RegisterCommand    = new DelegateCommand(ExecuteRegisterCommandAsync).ObservesCanExecute(() => CanExecuteRegisterCommand);
+        GoBackCommand      = new DelegateCommand(ExecuteGoBackCommand);
         Password           = string.Empty;
     }
 
-
-
-    #endregion
+#endregion
 
     #region Public Properties
 
-    public DelegateCommand RegisterCommand           { get; }
+    public DelegateCommand RegisterCommand { get; }
 
-    public bool            CanExecuteRegisterCommand { get; set; }
+    public DelegateCommand GoBackCommand { get; }
+
+    public bool CanExecuteRegisterCommand
+    {
+        get => _canExecuteRegisterCommand;
+        set => SetProperty(ref _canExecuteRegisterCommand, value);
+    }
 
     public string? Password
     {
@@ -67,7 +74,7 @@ public class RegisterViewModel : ViewModelBase
         }
     }
 
-#endregion
+    #endregion
 
     #region Public Methods
 
@@ -76,6 +83,11 @@ public class RegisterViewModel : ViewModelBase
     #endregion
 
     #region Private Methods
+
+    private void ExecuteGoBackCommand()
+    {
+        _navigationService.Navigate(new LoginViewModel(_dataService, _navigationService));
+    }
 
     private async void ExecuteRegisterCommandAsync()
     {
