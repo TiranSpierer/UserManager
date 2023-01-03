@@ -3,7 +3,8 @@
 // Created at 26/12/2022
 // Class propose:
 
-using DAL.Services;
+using DAL.Services.Interfaces;
+using DAL.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ public class RegisterViewModel : ViewModelBase
 {
 #region Privates
 
-    private readonly IDataService<User> _userService;
+    private readonly DataServiceWrapper _dataService;
     private readonly INavigationService _navigationService;
 
     private string? _password;
@@ -26,9 +27,9 @@ public class RegisterViewModel : ViewModelBase
 
 #region Constructors
 
-    public RegisterViewModel(IDataService<User> userService, NavigationService<LoginViewModel> navigationService)
+    public RegisterViewModel(DataServiceWrapper dataService, INavigationService navigationService)
     {
-        _userService       = userService;
+        _dataService       = dataService;
         _navigationService = navigationService;
         RegisterCommand    = new DelegateCommand(ExecuteRegisterCommandAsync).ObservesCanExecute(() => CanExecuteRegisterCommand);
         Password           = string.Empty;
@@ -85,15 +86,15 @@ public class RegisterViewModel : ViewModelBase
                        Id       = Username!
                    };
 
-        await _userService.Create(user);
-        _navigationService.Navigate();
+        await _dataService.UserService.Create(user);
+        _navigationService.Navigate(new LoginViewModel(_dataService, _navigationService));
     }
 
     private async void CanExecuteRegisterCommandAsync()
     {
         if (string.IsNullOrEmpty(Username) == false)
         {
-            CanExecuteRegisterCommand = await _userService.GetById(Username) == null;
+            CanExecuteRegisterCommand = await _dataService.UserService.GetById(Username) == null;
         }
         else
         {

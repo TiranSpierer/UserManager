@@ -5,23 +5,37 @@
 
 using System;
 using System.Collections.Generic;
+using EventAggregator;
+using Prism.Events;
 using UserManager.ViewModels;
 
 namespace UserManager.Navigation;
 
-public class NavigationService<TViewModel> : INavigationService where TViewModel : ViewModelBase
+public class NavigationService : INavigationService
 {
-    private readonly Navigator  _navigator;
-    private readonly Func<TViewModel> _createViewModel;
+    private readonly IEventAggregator _ea;
+    private          ViewModelBase?   _currentViewModel;
 
-    public NavigationService(Navigator navigator, Func<TViewModel> createViewModel)
+    public NavigationService(IEventAggregator ea)
     {
-        _navigator = navigator;
-        _createViewModel = createViewModel;
+        _ea   = ea;
     }
 
-    public void Navigate()
+    public ViewModelBase? CurrentViewModel
     {
-        _navigator.CurrentViewModel = _createViewModel();
+        get => _currentViewModel;
+        set
+        {
+            _currentViewModel?.Dispose();
+            _currentViewModel = value;
+            _ea.GetEvent<NavigationChangedEvent>().Publish();
+        }
     }
+
+
+    public void Navigate(ViewModelBase viewModel)
+    {
+        CurrentViewModel = viewModel;
+    }
+
 }

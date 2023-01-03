@@ -5,7 +5,8 @@
 
 using System;
 using System.Threading.Tasks;
-using DAL.Services;
+using DAL.Services.Interfaces;
+using DAL.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using UserManager.Navigation;
@@ -16,7 +17,7 @@ public class LoginViewModel : ViewModelBase
 {
 #region Privates
     
-    private readonly IDataService<User> _userService;
+    private readonly DataServiceWrapper _dataService;
     private readonly INavigationService _navigationService;
 
     private string? _errorMessage;
@@ -29,9 +30,9 @@ public class LoginViewModel : ViewModelBase
 
     #region Constructors
 
-    public LoginViewModel(IDataService<User> userService, NavigationService<RegisterViewModel> navigationService)
+    public LoginViewModel(DataServiceWrapper dataService, INavigationService navigationService)
     {
-        _userService       = userService;
+        _dataService       = dataService;
         _navigationService = navigationService;
         LoginCommand       = new DelegateCommand(ExecuteLoginCommandAsync).ObservesCanExecute(() => CanExecuteLoginCommand);
         RegisterCommand    = new DelegateCommand(ExecuteRegisterCommand);
@@ -90,19 +91,19 @@ public class LoginViewModel : ViewModelBase
     private void ExecuteLoginCommandAsync()
     {
         IsLoggedIn = true;
-        _navigationService.Navigate();
+        _navigationService.Navigate(new HomeViewModel(_dataService, _navigationService));
     }
 
     private async Task CanExecuteLoginCommandAsync()
     {
-        var user = await _userService.GetById(Username!);
+        var user = await _dataService.UserService.GetById(Username!);
 
         CanExecuteLoginCommand = user != null && user.Password == Password;
     }
 
     private void ExecuteRegisterCommand()
     {
-        _navigationService.Navigate();
+        _navigationService.Navigate(new RegisterViewModel(_dataService, _navigationService));
     }
 
     #endregion

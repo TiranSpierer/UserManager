@@ -7,21 +7,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Services.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Services;
+namespace DAL.Services.ConcreteServices;
 
 public class UserPrivilegeService : DataServiceBase,
                                     IDataService<UserPrivilege>
 {
-#region Constructors
+    #region Constructors
 
     public UserPrivilegeService(DataBaseContext context) : base(context)
     {
     }
 
-#endregion
+    #endregion
 
     #region Implementation of ICrudService<UserPrivilege>
 
@@ -90,5 +91,5 @@ public class UserPrivilegeService : DataServiceBase,
         }
     }
 
-#endregion
+    #endregion
 }

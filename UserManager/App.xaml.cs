@@ -45,7 +45,7 @@ public partial class App : Application
 
         _appHost.Services.GetRequiredService<IDatabaseInitializer>().Initialize();
 
-        //_appHost.Services.GetRequiredService<INavigationService>().Navigate();
+        _appHost.Services.GetRequiredService<INavigationService>().Navigate(_appHost.Services.GetRequiredService<LoginViewModel>());
 
         _appHost.Services.GetRequiredService<MainWindow>().Show();
 

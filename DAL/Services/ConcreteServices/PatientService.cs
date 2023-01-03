@@ -4,24 +4,23 @@
 // Class propose:
 
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
+using DAL.Services.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Services;
+namespace DAL.Services.ConcreteServices;
 
 public class PatientService : DataServiceBase,
                               IDataService<Patient>
 {
-#region Constructors
+    #region Constructors
 
     public PatientService(DataBaseContext context) : base(context) { }
 
-#endregion
+    #endregion
 
-#region Implementation of ICrudService<Patient>
+    #region Implementation of ICrudService<Patient>
 
     public async Task Create(Patient entity)
     {
@@ -46,7 +45,7 @@ public class PatientService : DataServiceBase,
 
         if (entity != null)
         {
-            entity.Name        = updatedEntity.Name;
+            entity.Name = updatedEntity.Name;
             entity.DateOfBirth = updatedEntity.DateOfBirth;
             _context.Patients!.Update(entity);
             await _context.SaveChangesAsync();

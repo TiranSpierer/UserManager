@@ -9,19 +9,20 @@ using System.Linq;
 using Domain.Models;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using DAL.Services.Interfaces;
 
-namespace DAL.Services;
+namespace DAL.Services.ConcreteServices;
 
 public class UserService : DataServiceBase,
                            IDataService<User>
 {
-#region Constructors
+    #region Constructors
 
     public UserService(DataBaseContext context) : base(context) { }
 
-#endregion
+    #endregion
 
-#region Implementation of ICrudService<User>
+    #region Implementation of ICrudService<User>
 
     public async Task Create(User entity)
     {
@@ -32,7 +33,7 @@ public class UserService : DataServiceBase,
         }
     }
 
-    public async Task <User?> GetById(object userId)
+    public async Task<User?> GetById(object userId)
     {
         User? user = null;
         if (userId is string id)
@@ -56,7 +57,7 @@ public class UserService : DataServiceBase,
 
         if (entity != null)
         {
-            entity.Name     = updatedEntity.Name;
+            entity.Name = updatedEntity.Name;
             entity.Password = updatedEntity.Password;
             _context.Users!.Update(entity);
             await _context.SaveChangesAsync();
@@ -65,7 +66,7 @@ public class UserService : DataServiceBase,
 
     public async Task Delete(object id)
     {
-        var entity      = await GetById(id);
+        var entity = await GetById(id);
         var isIndelible = entity?.UserPrivileges!.Any(up => up.Privilege == Privilege.Indelible);
 
         if (entity != null && isIndelible == false)
