@@ -3,11 +3,7 @@
 // Created at 27/12/2022
 // Class propose:
 
-using Domain.Models;
-using Microsoft.EntityFrameworkCore;
-
-
-namespace DAL.Setup;
+namespace DALTemp.Setup;
 
 public class DataBaseContext : DbContext
 {
