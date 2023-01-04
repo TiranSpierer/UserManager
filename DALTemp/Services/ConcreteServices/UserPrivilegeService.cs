@@ -4,14 +4,16 @@
 // Class propose:
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DALTemp.Services.Interfaces;
 using DALTemp.Setup;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DALTemp.Services.ConcreteServices;
 
-public class UserPrivilegeService : DataServiceBase,
-                                    IDataService<UserPrivilege>
+public class UserPrivilegeService : DataServiceBase<UserPrivilege>
 {
     #region Constructors
 
@@ -22,45 +24,6 @@ public class UserPrivilegeService : DataServiceBase,
     #endregion
 
     #region Implementation of ICrudService<UserPrivilege>
-
-    public async Task Create(UserPrivilege entity)
-    {
-        await _context.UserPrivileges!.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task CreateRange(IEnumerable<UserPrivilege> userPrivileges)
-    {
-        await _context.UserPrivileges!.AddRangeAsync(userPrivileges);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task CreateRange(string userId, IEnumerable<Privilege> privileges)
-    {
-        var userPrivileges = new List<UserPrivilege>();
-
-        foreach (var privilege in privileges)
-        {
-            userPrivileges.Add(new UserPrivilege()
-                               {
-                UserId = userId,
-                Privilege = privilege
-                               });
-        }
-        await CreateRange(userPrivileges);
-    }
-
-    public async Task<UserPrivilege?> GetById(object compositeId)
-    {
-        UserPrivilege? userPrivilege = null;
-
-        if (compositeId is UserPrivilege id)
-        {
-            userPrivilege = await _context.UserPrivileges!.FindAsync(id.UserId, id.Privilege);
-        }
-
-        return userPrivilege;
-    }
 
     public async Task<IEnumerable<Privilege>?> GetAllUserPrivilegesByUserId(string userId)
     {
@@ -82,31 +45,25 @@ public class UserPrivilegeService : DataServiceBase,
         return users;
     }
 
-    public async Task<IEnumerable<UserPrivilege>> GetAll()
+    public async Task CreateRange(IEnumerable<UserPrivilege> userPrivileges)
     {
-        return await _context.UserPrivileges!.ToListAsync();
+        await _context.UserPrivileges!.AddRangeAsync(userPrivileges);
+        await _context.SaveChangesAsync();
     }
 
-    public async Task Update(object id, UserPrivilege updatedEntity)
+    public async Task CreateRange(string userId, IEnumerable<Privilege> privileges)
     {
-        var entity = await GetById(id);
+        var userPrivileges = new List<UserPrivilege>();
 
-        if (entity != null)
+        foreach (var privilege in privileges)
         {
-            _context.UserPrivileges!.Update(entity);
-            await _context.SaveChangesAsync();
+            userPrivileges.Add(new UserPrivilege()
+                               {
+                                   UserId    = userId,
+                                   Privilege = privilege
+                               });
         }
-    }
-
-    public async Task Delete(object id)
-    {
-        var entity = await GetById(id);
-
-        if (entity != null)
-        {
-            _context.UserPrivileges!.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
+        await CreateRange(userPrivileges);
     }
 
     #endregion

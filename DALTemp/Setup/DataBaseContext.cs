@@ -3,6 +3,9 @@
 // Created at 27/12/2022
 // Class propose:
 
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace DALTemp.Setup;
 
 public class DataBaseContext : DbContext
@@ -22,8 +25,8 @@ public class DataBaseContext : DbContext
         UserBuilder(modelBuilder);
         PatientBuilder(modelBuilder);
         UserPrivilegeBuilder(modelBuilder);
+        RegistrationBuilder(modelBuilder);
     }
-
 
     private static void UserBuilder(ModelBuilder modelBuilder)
     {
@@ -52,5 +55,11 @@ public class DataBaseContext : DbContext
     {
         modelBuilder.Entity<UserPrivilege>()
                     .HasKey(up => new { up.UserId, up.Privilege });
+    }
+
+    private static void RegistrationBuilder(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Registration>()
+                    .HasKey(r => r.ProcedureId);
     }
 }

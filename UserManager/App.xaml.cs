@@ -1,6 +1,5 @@
-﻿using System;
-using System.Windows;
-using DAL.Setup;
+﻿using System.Windows;
+using DALTemp.Setup;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UserManager.HostBuilders;

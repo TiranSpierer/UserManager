@@ -4,9 +4,7 @@
 // Class propose:
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using DAL.Services.Interfaces;
-using DAL.Services.Wrapper;
+using DALTemp.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using System.Threading.Tasks;

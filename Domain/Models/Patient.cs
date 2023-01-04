@@ -4,10 +4,11 @@
 // Class propose:
 
 using System;
+using Domain.Interfaces;
 
 namespace Domain.Models;
 
-public class Patient
+public class Patient : IEntity<Patient>
 {
 
     #region Public Properties
@@ -18,4 +19,14 @@ public class Patient
 
     #endregion
 
+#region Implementation of IEntity<Patient>
+
+    public void CopyValuesTo(Patient entity)
+    {
+        entity.Id = Id;
+        entity.Name = Name;
+        entity.DateOfBirth = DateOfBirth;
+    }
+
+#endregion
 }

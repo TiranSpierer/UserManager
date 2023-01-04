@@ -3,9 +3,11 @@
 // Created at 27/12/2022
 // Class propose:
 
+using Domain.Interfaces;
+
 namespace Domain.Models;
 
-public class UserPrivilege
+public class UserPrivilege : IEntity<UserPrivilege>
 {
 
     #region Public Properties
@@ -15,4 +17,13 @@ public class UserPrivilege
 
     #endregion
 
+#region Implementation of IEntity<in UserPrivilege>
+
+    public void CopyValuesTo(UserPrivilege entity)
+    {
+        entity.UserId = UserId;
+        entity.Privilege = Privilege;
+    }
+
+#endregion
 }

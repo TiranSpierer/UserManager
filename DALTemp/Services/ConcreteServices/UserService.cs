@@ -4,14 +4,16 @@
 // Class propose:
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DALTemp.Services.Interfaces;
 using DALTemp.Setup;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DALTemp.Services.ConcreteServices;
 
-public class UserService : DataServiceBase<User>,
-                           IDataService<User>
+public class UserService : DataServiceBase<User>
 {
     #region Constructors
 
@@ -21,67 +23,25 @@ public class UserService : DataServiceBase<User>,
 
     #region Implementation of ICrudService<User>
 
-    public async Task Create(User entity)
-    {
-        if (string.IsNullOrEmpty(entity.Id) == false)
-        {
-            await _context.Users!.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public override async Task<User?> GetById(object userId)
+    public override async Task<User?> GetById(params object[] userId)
     {
         User? user = null;
-        if (userId is string id)
+        if (userId.Length == 1 && userId[0] is string id)
         {
-            user = await _context.Users!
-                                 .Include(u => u.UserPrivileges)
-                                 .FirstOrDefaultAsync(u => u.Id == id);
+            user = await _dbSet
+                        .Include(u => u.UserPrivileges)
+                        .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         return user;
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public override async Task<IEnumerable<User>> GetAll()
     {
-        return await _context.Users!
-                             .Include(u => u.UserPrivileges)
-                             .ToListAsync();
+        return await _dbSet
+                    .Include(u => u.UserPrivileges)
+                    .ToListAsync();
     }
 
-    public async Task Update(object id, User updatedEntity)
-    {
-        var entity = await GetById(id);
-
-        if (entity != null)
-        {
-            if (entity.Id == updatedEntity.Id)
-            {
-                entity.Name     = updatedEntity.Name;
-                entity.Password = updatedEntity.Password;
-                _context.Users!.Update(entity);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                await Delete(entity.Id);
-                await Create(updatedEntity);
-            }
-        }
-    }
-
-    public async Task Delete(object id)
-    {
-        var entity = await GetById(id);
-        var isIndelible = entity?.UserPrivileges!.Any(up => up.Privilege == Privilege.Indelible);
-
-        if (entity != null && isIndelible == false)
-        {
-            _context.Users!.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    #endregion
+#endregion
 }

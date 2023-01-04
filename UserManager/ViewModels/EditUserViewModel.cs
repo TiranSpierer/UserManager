@@ -3,7 +3,7 @@
 // Created at 03/01/2023
 // Class propose:
 
-using DAL.Services.Wrapper;
+using DALTemp.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using UserManager.Navigation;

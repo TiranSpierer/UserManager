@@ -4,10 +4,8 @@
 // Class propose:
 
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
-using DAL.Services.Wrapper;
+using DALTemp.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using UserManager.Navigation;

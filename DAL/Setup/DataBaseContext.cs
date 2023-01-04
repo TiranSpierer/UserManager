@@ -19,7 +19,7 @@ public class DataBaseContext : DbContext
     public DbSet<User>?          Users          { get; set; }
     public DbSet<Patient>?       Patients       { get; set; }
     public DbSet<UserPrivilege>? UserPrivileges { get; set; }
-    public DbSet<Registration>?  Registrations  { get; set; }
+    //public DbSet<Registration>?  Registrations  { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,8 +1,9 @@
-﻿// UserManager/DAL/DataBaseContextFactory.cs
+﻿// UserManager/DALTemp/DataBaseContextFactory.cs
 // Created by Tiran Spierer
-// Created at 01/01/2023
+// Created at 04/01/2023
 // Class propose:
 
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace DALTemp.Setup;

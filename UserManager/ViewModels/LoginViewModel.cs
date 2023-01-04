@@ -3,11 +3,8 @@
 // Created at 26/12/2022
 // Class propose:
 
-using System;
 using System.Threading.Tasks;
-using DAL.Services.Interfaces;
-using DAL.Services.Wrapper;
-using Domain.Models;
+using DALTemp.Services.Wrapper;
 using Prism.Commands;
 using UserManager.Navigation;
 

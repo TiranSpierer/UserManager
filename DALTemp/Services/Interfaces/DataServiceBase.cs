@@ -6,40 +6,47 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DALTemp.Setup;
+using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DALTemp.Services.Interfaces;
 
-public abstract class DataServiceBase<T> : IDataService<T> where T : class
+public abstract class DataServiceBase<T> : IDataService<T> where T : class, IEntity<T>
 {
     protected readonly DataBaseContext _context;
+    protected readonly DbSet<T>        _dbSet;
 
     protected DataServiceBase(DataBaseContext context)
     {
-        _context        = context;
+        _context = context;
+        _dbSet   = context.Set<T>();
     }
 
-    #region Implementation of ICrudService<T>
+    #region Implementation of IDataService<T>
 
-    public virtual async Task Create(T entity)
+    public virtual async Task<bool> Create(T entity)
     {
-        if (await IsEntityInDataBase(entity) == false)
+        var isEntityCreated = true;
+        try
         {
-            await _context.Set<T>().AddAsync(entity);
+            await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
-        else
+        catch
         {
-            // Todo - return boolean value or throw an exception?
+            isEntityCreated = false;
         }
+
+        return isEntityCreated;
     }
 
-    public virtual async Task<T?> GetById(object id)
+    public virtual async Task<T?> GetById(params object[] id)
     {
         T?     entity = null;
 
         if (IsIdValid(id))
         {
-            entity = await _context.Set<T>().FindAsync(id);
+            entity = await _dbSet.FindAsync(id);
         }
 
         return entity;
@@ -47,7 +54,7 @@ public abstract class DataServiceBase<T> : IDataService<T> where T : class
 
     public virtual async Task<IEnumerable<T>> GetAll()
     {
-        return await _context.Set<T>().ToListAsync();
+        return await _dbSet.ToListAsync();
     }
 
     public virtual async Task Update(object id, T updatedEntity)
@@ -56,8 +63,17 @@ public abstract class DataServiceBase<T> : IDataService<T> where T : class
 
         if (entity != null)
         {
-            _context.Set<T>().Update(updatedEntity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                updatedEntity.CopyValuesTo(entity);
+                _dbSet.Update(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                await Delete(entity);
+                await Create(updatedEntity);
+            }
         }
     }
 
@@ -66,15 +82,20 @@ public abstract class DataServiceBase<T> : IDataService<T> where T : class
         var entity = await GetById(id);
         if (entity != null)
         {
-            _context.Set<T>().Remove(entity);
+            _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
     }
 
     #endregion
 
-    protected bool IsIdValid(object id)
+    #region Private Methods
+
+    private bool IsIdValid(object id)
     {
-        return id is not string || id is string s && string.IsNullOrEmpty(s) == false;
+        return id.GetType() != typeof(string) || id is string s && string.IsNullOrEmpty(s) == false;
     }
+
+    #endregion
+
 }

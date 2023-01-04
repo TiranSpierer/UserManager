@@ -4,10 +4,10 @@
 // Class propose:
 
 using System;
-using DAL.Services.ConcreteServices;
-using DAL.Services.Interfaces;
-using DAL.Services.Wrapper;
-using DAL.Setup;
+using DALTemp.Services.ConcreteServices;
+using DALTemp.Services.Interfaces;
+using DALTemp.Services.Wrapper;
+using DALTemp.Setup;
 using Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,8 +28,9 @@ public static class AddServicesHostBuilderExtensions
                                    services.AddSingleton<IDataService<User>, UserService>();
                                    services.AddSingleton<IDataService<Patient>, PatientService>();
                                    services.AddSingleton<IDataService<UserPrivilege>, UserPrivilegeService>();
+                                   services.AddSingleton<IDataService<Registration>, RegistrationService>();
                                    services.AddSingleton<IDatabaseInitializer, DatabaseInitializer>();
-                                   services.AddSingleton<DataServiceWrapper>(CreateDataServiceWrapper);
+                                   services.AddSingleton(CreateDataServiceWrapper);
 
                                    services.AddSingleton<INavigationService, NavigationService>();
 
@@ -42,7 +43,8 @@ public static class AddServicesHostBuilderExtensions
         return DataServiceWrapper.Instance(
                                            service.GetRequiredService<IDataService<User>>(), 
                                            service.GetRequiredService<IDataService<Patient>>(), 
-                                           service.GetRequiredService<IDataService<UserPrivilege>>());
+                                           service.GetRequiredService<IDataService<UserPrivilege>>(),
+                                           service.GetRequiredService<IDataService<Registration>>());
 
     }
 }

@@ -4,6 +4,7 @@
 // Class propose:
 
 using DALTemp.Services.Interfaces;
+using Domain.Models;
 
 namespace DALTemp.Services.Wrapper;
 
@@ -20,11 +21,12 @@ public sealed class DataServiceWrapper
 
     #region Constructors
 
-    private DataServiceWrapper(IDataService<User> userService, IDataService<Patient> patientService, IDataService<UserPrivilege> userPrivilegeService)
+    private DataServiceWrapper(IDataService<User> userService, IDataService<Patient> patientService, IDataService<UserPrivilege> userPrivilegeService, IDataService<Registration> registrationService)
     {
         UserService          = userService;
         PatientService       = patientService;
         UserPrivilegeService = userPrivilegeService;
+        RegistrationService  = registrationService;
     }
 
     #endregion
@@ -34,18 +36,19 @@ public sealed class DataServiceWrapper
     public IDataService<User>          UserService          { get; set; }
     public IDataService<Patient>       PatientService       { get; set; }
     public IDataService<UserPrivilege> UserPrivilegeService { get; set; }
+    public IDataService<Registration>  RegistrationService  { get; set; }
 
-#endregion
+    #endregion
 
     #region Public Methods
 
-    public static DataServiceWrapper Instance(IDataService<User> userService, IDataService<Patient> patientService, IDataService<UserPrivilege> userPrivilegeService)
+    public static DataServiceWrapper Instance(IDataService<User> userService, IDataService<Patient> patientService, IDataService<UserPrivilege> userPrivilegeService, IDataService<Registration> registrationService)
     {
         if (_instance == null)
         {
             lock (_mutex)
             {
-                _instance ??= new DataServiceWrapper(userService, patientService, userPrivilegeService);
+                _instance ??= new DataServiceWrapper(userService, patientService, userPrivilegeService, registrationService);
             }
         }
 

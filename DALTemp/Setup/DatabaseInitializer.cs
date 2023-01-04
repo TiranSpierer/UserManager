@@ -3,6 +3,7 @@
 // Created at 29/12/2022
 // Class propose:
 
+using Domain.Models;
 using System;
 using System.Linq;
 

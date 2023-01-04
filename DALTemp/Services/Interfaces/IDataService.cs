@@ -5,14 +5,15 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Domain.Interfaces;
 
 namespace DALTemp.Services.Interfaces;
 
-public interface IDataService<T> where T : class
+public interface IDataService<T> where T : class, IEntity<T>
 {
-    Task Create(T entity);
-    Task<T?> GetById(object id);
+    Task<bool>           Create(T       entity);
+    Task<T?>             GetById(params object[] id);
     Task<IEnumerable<T>> GetAll();
-    Task Update(object id, T updatedEntity);
-    Task Delete(object id);
+    Task                 Update(object id, T updatedEntity);
+    Task                 Delete(object id);
 }
