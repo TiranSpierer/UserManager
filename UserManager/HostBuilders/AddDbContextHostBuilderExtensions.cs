@@ -5,7 +5,7 @@
 
 using System;
 using System.IO;
-using DALTemp.Setup;
+using DAL.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

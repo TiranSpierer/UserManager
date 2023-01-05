@@ -6,7 +6,7 @@
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DALTemp.Setup;
+namespace DAL.Setup;
 
 public class DataBaseContext : DbContext
 {

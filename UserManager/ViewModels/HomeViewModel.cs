@@ -5,7 +5,7 @@
 
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using DALTemp.Services.Wrapper;
+using DAL.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using UserManager.Navigation;

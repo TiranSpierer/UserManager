@@ -6,12 +6,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DALTemp.Services.Interfaces;
-using DALTemp.Setup;
+using DAL.Services.Interfaces;
+using DAL.Setup;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DALTemp.Services.ConcreteServices;
+namespace DAL.Services.ConcreteServices;
 
 public class UserPrivilegeService : DataServiceBase<UserPrivilege>
 {

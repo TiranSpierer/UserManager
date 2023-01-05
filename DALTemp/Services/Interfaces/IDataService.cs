@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.Interfaces;
 
-namespace DALTemp.Services.Interfaces;
+namespace DAL.Services.Interfaces;
 
 public interface IDataService<T> where T : class, IEntity<T>
 {

@@ -3,10 +3,10 @@
 // Created at 03/01/2023
 // Class propose:
 
-using DALTemp.Services.Interfaces;
+using DAL.Services.Interfaces;
 using Domain.Models;
 
-namespace DALTemp.Services.Wrapper;
+namespace DAL.Services.Wrapper;
 
 public sealed class DataServiceWrapper
 {

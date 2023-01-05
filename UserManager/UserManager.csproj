@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DALTemp\DALTemp.csproj" />
+    <ProjectReference Include="..\DALTemp\DAL.csproj" />
     <ProjectReference Include="..\EventAggregator\EventAggregator.csproj" />
   </ItemGroup>
 

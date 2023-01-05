@@ -4,6 +4,7 @@
 // Class propose:
 
 using System;
+using System.Collections.Generic;
 using Domain.Interfaces;
 
 namespace Domain.Models;
@@ -17,9 +18,11 @@ public class Patient : IEntity<Patient>
     public string?   Name        { get; set; }
     public DateTime? DateOfBirth { get; set; }
 
+    public virtual ICollection<Procedure> Procedures { get; set; }
+
     #endregion
 
-#region Implementation of IEntity<Patient>
+    #region Implementation of IEntity<Patient>
 
     public void CopyValuesTo(Patient entity)
     {

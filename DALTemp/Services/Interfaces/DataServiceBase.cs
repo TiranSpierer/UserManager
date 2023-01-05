@@ -5,11 +5,11 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DALTemp.Setup;
+using DAL.Setup;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace DALTemp.Services.Interfaces;
+namespace DAL.Services.Interfaces;
 
 public abstract class DataServiceBase<T> : IDataService<T> where T : class, IEntity<T>
 {

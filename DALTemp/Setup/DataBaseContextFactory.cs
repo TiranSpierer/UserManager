@@ -6,7 +6,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace DALTemp.Setup;
+namespace DAL.Setup;
 
 public class DataBaseContextFactory
 {

@@ -7,7 +7,7 @@ using Domain.Models;
 using System;
 using System.Linq;
 
-namespace DALTemp.Setup;
+namespace DAL.Setup;
 
 public class DatabaseInitializer : IDatabaseInitializer
 {
