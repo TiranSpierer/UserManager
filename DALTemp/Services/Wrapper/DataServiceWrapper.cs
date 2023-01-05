@@ -1,8 +1,9 @@
-﻿// UserManager/DAL/DataServiceWrapper.cs
-// Created by Tiran Spierer
-// Created at 03/01/2023
-// Class propose:
-
+﻿/*
+    UserManager/DAL/DataServiceWrapper.cs
+    Created by Tiran Spierer
+    Created at 03/01/2023
+    Class propose:  
+*/
 using DAL.Services.Interfaces;
 using Domain.Models;
 

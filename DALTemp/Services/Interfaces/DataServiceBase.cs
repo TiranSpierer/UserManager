@@ -1,5 +1,5 @@
 ﻿/*
-    UserManager/DAL/DataBaseSetup.cs
+    UserManager/DAL/Interfaces/DataServiceBase.cs
     Created by Tiran Spierer
     Created at 27/12/2022
     Class propose:  Abstract base class that provides basic CRUD (Create, Read, Update, Delete) functionality for a database entity. 

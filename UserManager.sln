@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventAggregator", "EventAgg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DALTemp\DAL.csproj", "{27B218E7-B756-4615-A751-48738E0932FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDAL", "TestDAL\TestDAL.csproj", "{15C7EF1B-0EEC-4474-BF35-99685915B3AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{6FE202CA-7C23-4455-A5FE-CDDB7AB52471}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{27B218E7-B756-4615-A751-48738E0932FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27B218E7-B756-4615-A751-48738E0932FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27B218E7-B756-4615-A751-48738E0932FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15C7EF1B-0EEC-4474-BF35-99685915B3AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15C7EF1B-0EEC-4474-BF35-99685915B3AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15C7EF1B-0EEC-4474-BF35-99685915B3AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15C7EF1B-0EEC-4474-BF35-99685915B3AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FE202CA-7C23-4455-A5FE-CDDB7AB52471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FE202CA-7C23-4455-A5FE-CDDB7AB52471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FE202CA-7C23-4455-A5FE-CDDB7AB52471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FE202CA-7C23-4455-A5FE-CDDB7AB52471}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

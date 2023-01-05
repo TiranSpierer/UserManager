@@ -3,12 +3,16 @@
 // Created at 26/12/2022
 // Class propose:
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security;
 using DAL.Services.Wrapper;
 using Domain.Models;
 using Prism.Commands;
 using System.Threading.Tasks;
 using UserManager.Navigation;
+using Utilities;
 
 namespace UserManager.ViewModels;
 

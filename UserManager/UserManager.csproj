@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DALTemp\DAL.csproj" />
     <ProjectReference Include="..\EventAggregator\EventAggregator.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
