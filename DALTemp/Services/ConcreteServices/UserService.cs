@@ -32,7 +32,6 @@ public class UserService : DataServiceBase<User>
                         .Include(u => u.UserPrivileges)
                         .FirstOrDefaultAsync(u => u.Id == id);
         }
-
         return user;
     }
 
