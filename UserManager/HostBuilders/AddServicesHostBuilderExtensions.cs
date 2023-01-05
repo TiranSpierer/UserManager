@@ -29,6 +29,9 @@ public static class AddServicesHostBuilderExtensions
                                    services.AddSingleton<IDataService<Patient>, PatientService>();
                                    services.AddSingleton<IDataService<UserPrivilege>, UserPrivilegeService>();
                                    services.AddSingleton<IDataService<Registration>, RegistrationService>();
+                                   services.AddSingleton<IDataService<Procedure>, ProcedureService>();
+                                   services.AddSingleton<IDataService<Frame>, FrameService>();
+
                                    services.AddSingleton<IDatabaseInitializer, DatabaseInitializer>();
                                    services.AddSingleton(CreateDataServiceWrapper);
 
@@ -44,7 +47,9 @@ public static class AddServicesHostBuilderExtensions
                                            service.GetRequiredService<IDataService<User>>(), 
                                            service.GetRequiredService<IDataService<Patient>>(), 
                                            service.GetRequiredService<IDataService<UserPrivilege>>(),
-                                           service.GetRequiredService<IDataService<Registration>>());
+                                           service.GetRequiredService<IDataService<Registration>>(),
+                                           service.GetRequiredService<IDataService<Procedure>>(),
+                                           service.GetRequiredService<IDataService<Frame>>());
 
     }
 }

@@ -21,12 +21,20 @@ public sealed class DataServiceWrapper
 
     #region Constructors
 
-    private DataServiceWrapper(IDataService<User> userService, IDataService<Patient> patientService, IDataService<UserPrivilege> userPrivilegeService, IDataService<Registration> registrationService)
+    private DataServiceWrapper(IDataService<User> userService, 
+                               IDataService<Patient> patientService, 
+                               IDataService<UserPrivilege> userPrivilegeService, 
+                               IDataService<Registration> registrationService, 
+                               IDataService<Procedure> procedureService,
+                               IDataService<Frame> frameService)
+    
     {
         UserService          = userService;
         PatientService       = patientService;
         UserPrivilegeService = userPrivilegeService;
         RegistrationService  = registrationService;
+        ProcedureService     = procedureService;
+        FrameService         = frameService;
     }
 
     #endregion
@@ -37,18 +45,25 @@ public sealed class DataServiceWrapper
     public IDataService<Patient>       PatientService       { get; set; }
     public IDataService<UserPrivilege> UserPrivilegeService { get; set; }
     public IDataService<Registration>  RegistrationService  { get; set; }
+    public IDataService<Procedure>     ProcedureService     { get; set; }
+    public IDataService<Frame>         FrameService         { get; set; }
 
-    #endregion
+#endregion
 
     #region Public Methods
 
-    public static DataServiceWrapper Instance(IDataService<User> userService, IDataService<Patient> patientService, IDataService<UserPrivilege> userPrivilegeService, IDataService<Registration> registrationService)
+    public static DataServiceWrapper Instance(IDataService<User>          userService, 
+                                              IDataService<Patient>       patientService, 
+                                              IDataService<UserPrivilege> userPrivilegeService, 
+                                              IDataService<Registration>  registrationService, 
+                                              IDataService<Procedure>     procedureService,
+                                              IDataService<Frame>         frameService)
     {
         if (_instance == null)
         {
             lock (_mutex)
             {
-                _instance ??= new DataServiceWrapper(userService, patientService, userPrivilegeService, registrationService);
+                _instance ??= new DataServiceWrapper(userService, patientService, userPrivilegeService, registrationService, procedureService, frameService);
             }
         }
 

@@ -4,6 +4,7 @@
 // Class propose:
 
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -32,6 +33,7 @@ public class DatabaseInitializer : IDatabaseInitializer
 
     public void Initialize()
     {
+        //_context.Database.Migrate();
         _context.Database.EnsureCreated();
         CreateDefaultUser();
     }

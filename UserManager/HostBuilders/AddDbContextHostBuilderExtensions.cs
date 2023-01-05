@@ -19,13 +19,14 @@ public static class AddDbContextHostBuilderExtensions
     {
         host.ConfigureServices((context, services) =>
         {
-                                   var connectionString = context.Configuration.GetConnectionString("DefaultConnection");
-                                   Action<DbContextOptionsBuilder> configureDbContext = o => o.UseSqlite($"Data Source={connectionString}");
-                                   Directory.CreateDirectory(Path.GetDirectoryName(connectionString)!);
+            var connectionString = context.Configuration.GetConnectionString("DefaultConnection");
+            Action<DbContextOptionsBuilder> configureDbContext = o => o.UseSqlite($"Data Source={connectionString}");
+            Directory.CreateDirectory(Path.GetDirectoryName(connectionString)!);
 
-                                   services.AddDbContext<DataBaseContext>(configureDbContext);
-                                   services.AddSingleton(new DataBaseContextFactory(configureDbContext));
-                               });
+            services.AddDbContext<DataBaseContext>(configureDbContext);
+            services.AddSingleton(new DataBaseContextFactory(configureDbContext));
+            services.AddScoped<DataBaseContext>();
+        });
 
         return host;
     }

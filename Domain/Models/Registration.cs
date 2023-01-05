@@ -12,24 +12,24 @@ namespace Domain.Models;
 public class Registration : IEntity<Registration>
 {
     public int    ProcedureId              { get; set; }
-    public double XiphoidProcessPositionX  { get; set; }
-    public double XiphoidProcessPositionY  { get; set; }
-    public double XiphoidProcessPositionZ  { get; set; }
-    public double ReferenceSensorPositionX { get; set; }
-    public double ReferenceSensorPositionY { get; set; }
-    public double ReferenceSensorPositionZ { get; set; }
+    public double XiphoidX  { get; set; }
+    public double XiphoidY  { get; set; }
+    public double XiphoidZ  { get; set; }
+    public double RefX { get; set; }
+    public double RefY { get; set; }
+    public double RefZ { get; set; }
 
 
     #region Implementation of IEntity<in Registration>
     public void     CopyValuesTo(Registration entity)
     {
         entity.ProcedureId              = ProcedureId;
-        entity.XiphoidProcessPositionX  = XiphoidProcessPositionX;
-        entity.XiphoidProcessPositionY  = XiphoidProcessPositionY;
-        entity.XiphoidProcessPositionZ  = XiphoidProcessPositionZ;
-        entity.ReferenceSensorPositionX = ReferenceSensorPositionX;
-        entity.ReferenceSensorPositionY = ReferenceSensorPositionY;
-        entity.ReferenceSensorPositionZ = ReferenceSensorPositionZ;
+        entity.XiphoidX  = XiphoidX;
+        entity.XiphoidY  = XiphoidY;
+        entity.XiphoidZ  = XiphoidZ;
+        entity.RefX = RefX;
+        entity.RefY = RefY;
+        entity.RefZ = RefZ;
     }
 
 #endregion
