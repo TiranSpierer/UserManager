@@ -21,12 +21,12 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Utilities;
+namespace DAL.Utilities;
 
 public static class AesEncryption
 {
 
-#region Public Properties
+    #region Public Properties
 
     public static string Encrypt(string stringToEncrypt)
     {
@@ -42,7 +42,7 @@ public static class AesEncryption
             var encryptedString = Convert.ToBase64String(encrypted);
             combinedString = keyString + '|' + ivString + '|' + encryptedString;
         }
-        
+
 
         return combinedString;
     }
@@ -90,7 +90,7 @@ public static class AesEncryption
         // with the specified key and IV.
         using Aes aesAlg = Aes.Create();
         aesAlg.Key = key;
-        aesAlg.IV  = iv;
+        aesAlg.IV = iv;
 
         // Create an encryptor to perform the stream transform.
         var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
@@ -123,7 +123,7 @@ public static class AesEncryption
         // with the specified key and IV.
         using Aes aesAlg = Aes.Create();
         aesAlg.Key = key;
-        aesAlg.IV  = iv;
+        aesAlg.IV = iv;
 
         // Create a decryptor to perform the stream transform.
         var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
@@ -143,5 +143,5 @@ public static class AesEncryption
     }
 
 
-#endregion
+    #endregion
 }

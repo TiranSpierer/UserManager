@@ -9,6 +9,7 @@ using DAL.Services.Interfaces;
 using DAL.Services.Wrapper;
 using DAL.Setup;
 using Domain.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Prism.Events;
@@ -36,6 +37,8 @@ public static class AddServicesHostBuilderExtensions
                                    services.AddSingleton(CreateDataServiceWrapper);
 
                                    services.AddSingleton<INavigationService, NavigationService>();
+
+                                   services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
                                });
         return host;

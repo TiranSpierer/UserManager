@@ -12,7 +12,8 @@ using Domain.Models;
 using Prism.Commands;
 using System.Threading.Tasks;
 using UserManager.Navigation;
-using Utilities;
+using DAL.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace UserManager.ViewModels;
 
@@ -22,7 +23,7 @@ public class RegisterViewModel : ViewModelBase
 
     private readonly DataServiceWrapper _dataService;
     private readonly INavigationService _navigationService;
-
+    private readonly IPasswordHasher _passwordHasher;
     private string? _password;
     private string? _username;
     private string? _name;
@@ -35,10 +36,11 @@ public class RegisterViewModel : ViewModelBase
 
 #region Constructors
 
-    public RegisterViewModel(DataServiceWrapper dataService, INavigationService navigationService)
+    public RegisterViewModel(DataServiceWrapper dataService, INavigationService navigationService, IPasswordHasher passwordHasher)
     {
         _dataService       = dataService;
         _navigationService = navigationService;
+        _passwordHasher = passwordHasher;
         SelectedPrivileges = new HashSet<Privilege>();
         RegisterCommand    = new DelegateCommand(ExecuteRegisterCommandAsync).ObservesCanExecute(() => CanExecuteRegisterCommand);
         GoBackCommand      = new DelegateCommand(ExecuteGoBackCommand);
@@ -143,13 +145,14 @@ public class RegisterViewModel : ViewModelBase
         var user = new User()
                    {
                        Name     = Name,
-                       Password = Password,
+                       //Password = AesEncryption.Encrypt(Password),
+                       Password = _passwordHasher.HashPassword(Password),
                        Id       = Username!
                    };
 
         await _dataService.UserService.Create(user);
         await CreateUserPrivileges(user.Id);
-        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService, _passwordHasher));
     }
 
     private async void CanExecuteRegisterCommandAsync()

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using DAL.Services.Wrapper;
 using Prism.Commands;
 using UserManager.Navigation;
+using DAL.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace UserManager.ViewModels;
 
@@ -16,7 +18,7 @@ public class LoginViewModel : ViewModelBase
     
     private readonly DataServiceWrapper _dataService;
     private readonly INavigationService _navigationService;
-
+    private readonly IPasswordHasher _passwordHasher;
     private string? _errorMessage;
     private string? _password;
     private string? _username;
@@ -27,10 +29,11 @@ public class LoginViewModel : ViewModelBase
 
     #region Constructors
 
-    public LoginViewModel(DataServiceWrapper dataService, INavigationService navigationService)
+    public LoginViewModel(DataServiceWrapper dataService, INavigationService navigationService, IPasswordHasher passwordHasher)
     {
         _dataService       = dataService;
         _navigationService = navigationService;
+        _passwordHasher = passwordHasher;
         LoginCommand       = new DelegateCommand(ExecuteLoginCommandAsync).ObservesCanExecute(() => CanExecuteLoginCommand);
         RegisterCommand    = new DelegateCommand(ExecuteRegisterCommand);
         Password           = string.Empty;
@@ -88,19 +91,34 @@ public class LoginViewModel : ViewModelBase
     private void ExecuteLoginCommandAsync()
     {
         IsLoggedIn = true;
-        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService, _passwordHasher));
     }
 
     private async Task CanExecuteLoginCommandAsync()
     {
         var user = await _dataService.UserService.GetById(Username!);
 
-        CanExecuteLoginCommand = user != null && user.Password == Password;
+        if(user != null)
+        {
+            if(string.IsNullOrEmpty(user.Password) && string.IsNullOrEmpty(Password))
+            {
+                CanExecuteLoginCommand = true;
+            }
+            else if (string.IsNullOrEmpty(user.Password) == false)
+            {
+                //CanExecuteLoginCommand = AesEncryption.Decrypt(user.Password) == Password;
+                CanExecuteLoginCommand = _passwordHasher.VerifyHashedPassword(user.Password, Password) == PasswordVerificationResult.Success;
+            }
+        }
+        else
+        {
+            CanExecuteLoginCommand = false;
+        }
     }
 
     private void ExecuteRegisterCommand()
     {
-        _navigationService.NavigateTo(new RegisterViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new RegisterViewModel(_dataService, _navigationService, _passwordHasher));
     }
 
     #endregion

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DAL.Services.Wrapper;
 using Domain.Models;
+using Microsoft.AspNet.Identity;
 using Prism.Commands;
 using UserManager.Navigation;
 
@@ -21,16 +22,17 @@ public class HomeViewModel : ViewModelBase
     private          User?              _selectedUser;
     private          bool               _canExecuteEditCommand;
     private          bool               _canExecuteRemoveCommand;
+    private IPasswordHasher _passwordHasher;
 
-#endregion
+    #endregion
 
     #region Constructors
 
-    public HomeViewModel(DataServiceWrapper dataService, INavigationService navigationService)
+    public HomeViewModel(DataServiceWrapper dataService, INavigationService navigationService, IPasswordHasher passwordHasher)
     {
         _navigationService  = navigationService;
         _dataService        = dataService;
-
+        _passwordHasher = passwordHasher;
         NavigateBackCommand = new DelegateCommand(ExecuteNavigateBack);
         EditUserCommand     = new DelegateCommand(ExecuteEditUser).ObservesCanExecute(() => CanExecuteEditCommand);
         RemoveUsersCommand  = new DelegateCommand(ExecuteRemoveUsers).ObservesCanExecute(() => CanExecuteRemoveCommand);
@@ -101,7 +103,7 @@ public class HomeViewModel : ViewModelBase
 
     private void ExecuteAddUser()
     {
-        _navigationService.NavigateTo(new RegisterViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new RegisterViewModel(_dataService, _navigationService, _passwordHasher));
     }
 
     private async void ExecuteRemoveUsers()
@@ -112,7 +114,7 @@ public class HomeViewModel : ViewModelBase
 
     private void ExecuteEditUser()
     {
-        _navigationService.NavigateTo(new EditUserViewModel(_dataService, _navigationService, username: SelectedUser!.Id));
+        _navigationService.NavigateTo(new EditUserViewModel(_dataService, _navigationService, username: SelectedUser!.Id, _passwordHasher));
     }
 
     #endregion

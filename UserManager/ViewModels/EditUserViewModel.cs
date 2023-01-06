@@ -5,6 +5,7 @@
 
 using DAL.Services.Wrapper;
 using Domain.Models;
+using Microsoft.AspNet.Identity;
 using Prism.Commands;
 using UserManager.Navigation;
 
@@ -16,7 +17,7 @@ public class EditUserViewModel : ViewModelBase
 
     private readonly DataServiceWrapper _dataService;
     private readonly INavigationService _navigationService;
-
+    private readonly IPasswordHasher _passwordHasher;
     private readonly string  _originalUsername;
     private          string? _password;
     private          string? _username;
@@ -27,12 +28,12 @@ public class EditUserViewModel : ViewModelBase
 
     #region Constructors
 
-    public EditUserViewModel(DataServiceWrapper dataService, INavigationService navigationService, string username)
+    public EditUserViewModel(DataServiceWrapper dataService, INavigationService navigationService, string username, IPasswordHasher passwordHasher)
     {
         _dataService       = dataService;
         _navigationService = navigationService;
         _originalUsername  = username;
-
+        _passwordHasher = passwordHasher;
         SaveCommand        = new DelegateCommand(ExecuteSaveCommandAsync).ObservesCanExecute(() => CanExecuteSaveCommand);
         GoBackCommand      = new DelegateCommand(ExecuteGoBackCommand);
 
@@ -98,7 +99,7 @@ public class EditUserViewModel : ViewModelBase
 
     private void ExecuteGoBackCommand()
     {
-        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService));
+        _navigationService.NavigateTo(new HomeViewModel(_dataService, _navigationService, _passwordHasher));
     }
 
     private async void ExecuteSaveCommandAsync()
